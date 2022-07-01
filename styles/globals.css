@@ -9,7 +9,6 @@ body {
 :root {
   --primary: #3c78fac4;
   --background: #99b9fdc4;
-  --font-family:
-    "Segoe UI",
-    sans-serif;
+  --text-secondary: rgb(0 0 0 / 60%);
+  --font-family: sans-serif;
 }
