@@ -1,4 +1,12 @@
 module.exports = {
+  async rewrites() {
+    return [
+      {
+        source: '/:any*',
+        destination: '/',
+      },
+    ];
+  },
   images: {
     domains: ['lh3.googleusercontent.com']
   },
