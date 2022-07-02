@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import { Player, SearchBar } from '../components';
+import SearchPage from '../views/SearchPage';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function ClientSideRendering({ children }: any): JSX.Element {
@@ -29,9 +30,7 @@ export default function App(): JSX.Element {
             <Route
               path="/search"
               element={
-                <>
-                  <h1>Search</h1>
-                </>
+                <SearchPage />
               }
             />
             <Route
@@ -45,10 +44,10 @@ export default function App(): JSX.Element {
           </Routes>
           <Link to="/404">404</Link>
           <Link to="/">home</Link>
+
         </BrowserRouter>
       </ClientSideRendering >
-
-      <Player id={''} img={'https://lh3.googleusercontent.com'} name={''} album={''} artists={''}></Player>
+      <Player></Player>
     </>
   );
 }

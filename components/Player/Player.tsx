@@ -1,5 +1,5 @@
 import { PlayerProps } from "./Player.props";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import styles from "./Player.module.css";
 import YouTube, { YouTubeEvent } from "react-youtube";
 import { Range, getTrackBackground } from 'react-range';
@@ -11,14 +11,24 @@ import PauseIcon from "./pause.svg";
 import PlayIcon from "./play.svg";
 import VolumeUpIcon from "./volumeup.svg";
 import VolumeDownIcon from "./volumedown.svg";
+import { AppContext } from "../../context/app.context";
+import cn from "classnames";
+import axios from "axios";
 
-export const Player = ({ id, img, name, album, artists, ...props }: PlayerProps): JSX.Element => {
+export const Player = ({ ...props }: PlayerProps): JSX.Element => {
+    const { playlist, current, setCurrent, setPlaylist } = useContext(AppContext);
     const [duration, setDuration] = useState<number>(0);
     const [played, setPlayed] = useState<number>(0);
-    const [paused, setPaused] = useState<boolean>(true);
+    const [paused, setPaused] = useState<boolean>(false);
     const [volume, setVolume] = useState<number>(30);
     const [seeking, setSeeking] = useState<boolean>(false);
     const player = useRef<YouTube>(null);
+    useEffect(() => {
+        setVolume(parseInt(window.localStorage.getItem("volume") ?? "30"));
+    }, []);
+    useEffect(() => {
+        window.localStorage.setItem("volume", volume.toString());
+    }, [volume]);
     useEffect(() => {
         const interval = setInterval(async () => {
             if (!seeking) {
@@ -40,13 +50,19 @@ export const Player = ({ id, img, name, album, artists, ...props }: PlayerProps)
         };
     }, [duration, played, seeking, volume]);
     useEffect(() => {
-        window.onkeydown = function (e): void {
-            if (e.code === "Space" && e.target === document.body) {
+        window.onkeydown = async function (e): Promise<void> {
+            if (e.code === "Space" && e.target === document.body && playlist.length !== 0) {
                 e.preventDefault();
-                !paused ? player.current?.getInternalPlayer().pauseVideo() : player.current?.getInternalPlayer().playVideo();
+                const state = await player.current?.getInternalPlayer().getPlayerState();
+                if (state === 1 || state === 2) {
+                    !paused ? player.current?.getInternalPlayer().pauseVideo() : player.current?.getInternalPlayer().playVideo();
+                }
+                if (state === 5 && paused) {
+                    player.current?.getInternalPlayer().playVideo();
+                }
             }
         };
-    }, [duration, paused, played, seeking]);
+    }, [duration, paused, played, playlist.length, seeking]);
     const handleSeekMouseDown = (): void => {
         setSeeking(true);
     };
@@ -59,10 +75,39 @@ export const Player = ({ id, img, name, album, artists, ...props }: PlayerProps)
     const handleReady = (event: YouTubeEvent): void => {
         setDuration(event.target.getDuration());
         event.target.setVolume(volume);
+        paused ? event.target.pauseVideo() : event.target.playVideo();
+        if (current === playlist.length - 1) {
+            axios.post("https://ytmusicsearch.azurewebsites.net/getmusicmix", [{ "idVideo": playlist[current].videoId }]).then(response => {
+                setPlaylist?.(playlist.concat(response.data[0].tracks.splice(1)));
+            });
+        }
     };
-    return <div {...props} className={styles.player}>
+    const Next = (): void => {
+        if (playlist.length - 1 !== current) {
+            setCurrent?.(current + 1);
+        }
+    };
+    const Prev = (): void => {
+        if (0 !== current) {
+            setCurrent?.(current - 1);
+        }
+    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const isNotAlbum = (a: any): string => {
+        let found = false;
+        for (let i = 0; i < +a.length; i++) {
+            if (a[i] === "album") {
+                found = true;
+                break;
+            }
+        }
+        if (found) return a.album.name;
+        return a.title;
+    };
+    return <div {...props} className={cn({ [styles["none"]]: playlist.length === 0 }, styles.player)}>
         <YouTube
-            videoId={id}
+            key={playlist[current] === undefined ? "" : playlist[current].videoId}
+            videoId={playlist[current] === undefined ? "" : playlist[current].videoId}
             opts={{
                 height: '0',
                 width: '0',
@@ -71,15 +116,14 @@ export const Player = ({ id, img, name, album, artists, ...props }: PlayerProps)
             onReady={handleReady}
             onPlay={handlePlay}
             onPause={handlePause}
-        // onEnd={func}
-        // onError={func}
+            onEnd={Next}
         />
         <div className={styles["div-top"]}>
-            <Image alt={"Axel F"} src={img} width={100} height={100} className={styles["cover-image"]} />
+            <Image alt={playlist[current] === undefined ? "" : playlist[current].title} src={playlist[current] === undefined ? "https://lh3.googleusercontent.com" : playlist[current].thumbnail?.[0].url as string} width={100} height={100} className={styles["cover-image"]} />
             <div className={styles["div-top-texts"]}>
-                <p className={styles.album}>{album}</p>
-                <b className={styles.name}>{name}</b>
-                <p className={styles.artists}>{artists}</p>
+                <p className={styles.album}>{playlist[current] === undefined ? "" : isNotAlbum(playlist[current])}</p>
+                <b className={styles.name}>{playlist[current] === undefined ? "" : playlist[current].title}</b>
+                <p className={styles.artists}>{playlist[current] === undefined ? "" : playlist[current].artists?.[0].name}</p>
             </div>
         </div>
         <Range
@@ -123,13 +167,19 @@ export const Player = ({ id, img, name, album, artists, ...props }: PlayerProps)
         </div>
         <div className={styles["div-buttons"]}>
             <Button
-            //onClick={Prev}
+                onClick={Prev}
             >
                 <SkipIcon className={styles["icon-previous-next"]} />
             </Button>
             <Button
-                onClick={(): void => {
-                    !paused ? player.current?.getInternalPlayer().pauseVideo() : player.current?.getInternalPlayer().playVideo();
+                onClick={async (): Promise<void> => {
+                    const state = await player.current?.getInternalPlayer().getPlayerState();
+                    if (state === 1 || state === 2) {
+                        !paused ? player.current?.getInternalPlayer().pauseVideo() : player.current?.getInternalPlayer().playVideo();
+                    }
+                    if (state === 5 && paused) {
+                        player.current?.getInternalPlayer().playVideo();
+                    }
                 }}
             >
                 {paused ? (
@@ -143,7 +193,7 @@ export const Player = ({ id, img, name, album, artists, ...props }: PlayerProps)
                 )}
             </Button>
             <Button
-            //onClick={Next}
+                onClick={Next}
             >
                 <SkipIcon className={styles["icon-previous-next"]} style={{
                     transform: "rotate(180deg)"
@@ -193,5 +243,5 @@ export const Player = ({ id, img, name, album, artists, ...props }: PlayerProps)
                 marginLeft: "16px"
             }} />
         </div>
-    </div>;
+    </div >;
 };

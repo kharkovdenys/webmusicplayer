@@ -59,7 +59,6 @@
   font-size: 1rem;
   letter-spacing: 0.0094em;
   line-height: 1.5;
-  white-space: nowrap;
 }
 
 .artists {
@@ -128,4 +127,8 @@
   border-radius: 50%;
   box-shadow: 0 2px 12px 0 rgb(0 0 0 / 40%);
   outline: 0;
+}
+
+.none {
+  display: none;
 }
