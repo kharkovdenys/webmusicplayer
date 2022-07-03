@@ -18,7 +18,7 @@ export const Search = ({ className, placeholder, ...props }: SearchProps): JSX.E
         setSearch("");
     };
     return <form className={cn(className, styles.search)} autoComplete={"off"} role={"search"} onSubmit={(e): void => e.preventDefault()} {...props} >
-        <Input placeholder={placeholder} type={"text"} value={search}
+        <Input placeholder={placeholder} type={"text"} value={search} variant="search"
             onChange={(e): void => setSearch(e.target.value)} />
         <Button onClick={goToSearch}><SearchIcon className={styles.icon} /></Button>
     </form>;

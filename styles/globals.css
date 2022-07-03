@@ -6,6 +6,11 @@ body {
   font-family: var(--font-family);
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition: background-color 600000s 0s, color 600000s 0s;
+}
+
 :root {
   --primary: #3c78fac4;
   --background: #99b9fdc4;

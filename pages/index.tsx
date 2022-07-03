@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Player, SearchBar } from '../components';
-import SearchPage from '../views/SearchPage';
+import { LoginPage, RegisterPage, SearchPage } from '../views';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function ClientSideRendering({ children }: any): JSX.Element {
@@ -34,6 +34,18 @@ export default function App(): JSX.Element {
               }
             />
             <Route
+              path="/register"
+              element={
+                <RegisterPage />
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <LoginPage />
+              }
+            />
+            <Route
               path="/*"
               element={
                 <>
@@ -42,9 +54,6 @@ export default function App(): JSX.Element {
               }
             />
           </Routes>
-          <Link to="/404">404</Link>
-          <Link to="/">home</Link>
-
         </BrowserRouter>
       </ClientSideRendering >
       <Player></Player>
