@@ -46,6 +46,10 @@
   margin-bottom: 8px;
 }
 
+.div-empty {
+  height: 300px;
+}
+
 .album {
   margin: 0;
   color: var(--text-secondary);

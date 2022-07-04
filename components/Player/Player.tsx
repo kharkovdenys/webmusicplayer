@@ -73,6 +73,9 @@ export const Player = ({ ...props }: PlayerProps): JSX.Element => {
         setPaused(true);
     };
     const handleReady = (event: YouTubeEvent): void => {
+        if (event.target.isMuted()) {
+            event.target.unMute();
+        }
         setDuration(event.target.getDuration());
         event.target.setVolume(volume);
         paused ? event.target.pauseVideo() : event.target.playVideo();
@@ -104,115 +107,40 @@ export const Player = ({ ...props }: PlayerProps): JSX.Element => {
         if (found) return a.album.name;
         return a.title;
     };
-    return <div {...props} className={cn({ [styles["none"]]: playlist.length === 0 }, styles.player)}>
-        <YouTube
-            key={playlist[current] === undefined ? "" : playlist[current].videoId}
-            videoId={playlist[current] === undefined ? "" : playlist[current].videoId}
-            opts={{
-                height: '0',
-                width: '0',
-            }}
-            ref={player}
-            onReady={handleReady}
-            onPlay={handlePlay}
-            onPause={handlePause}
-            onEnd={Next}
-        />
-        <div className={styles["div-top"]}>
-            <Image alt={playlist[current] === undefined ? "" : playlist[current].title} src={playlist[current] === undefined ? "https://lh3.googleusercontent.com" : playlist[current].thumbnail?.[0].url as string} width={100} height={100} className={styles["cover-image"]} />
-            <div className={styles["div-top-texts"]}>
-                <p className={styles.album}>{playlist[current] === undefined ? "" : isNotAlbum(playlist[current])}</p>
-                <b className={styles.name}>{playlist[current] === undefined ? "" : playlist[current].title}</b>
-                <p className={styles.artists}>{playlist[current] === undefined ? "" : playlist[current].artists?.[0].name}</p>
-            </div>
-        </div>
-        <Range
-            step={0.001}
-            min={0}
-            max={0.999999}
-            values={[played]}
-            onChange={(values): void => setPlayed(values[0])}
-            renderTrack={({ props, children }): JSX.Element => (
-                <div
-                    onMouseDown={(e): void => { props.onMouseDown(e); handleSeekMouseDown(); }}
-                    onTouchStart={props.onTouchStart}
-                    className={styles["line"]}
-                >
-                    <div
-                        ref={props.ref}
-                        className={styles["indicator"]}
-                        style={{
-                            background: getTrackBackground({
-                                values: [played],
-                                colors: ["black", "#00000047"],
-                                min: 0,
-                                max: 0.999999
-                            }),
-                        }}
-                    >
-                        {children}
-                    </div>
-                </div>
-            )}
-            renderThumb={({ props }): JSX.Element => (
-                <div
-                    {...props}
-                    className={styles["time-thumb"]}
-                />
-            )}
-        />
-        <div className={styles["div-duration"]}>
-            <Duration seconds={duration * played} />
-            <Duration seconds={duration * (1 - played)} />
-        </div>
-        <div className={styles["div-buttons"]}>
-            <Button
-                onClick={Prev}
-            >
-                <SkipIcon className={styles["icon-previous-next"]} />
-            </Button>
-            <Button
-                onClick={async (): Promise<void> => {
-                    const state = await player.current?.getInternalPlayer().getPlayerState();
-                    if (state === 1 || state === 2) {
-                        !paused ? player.current?.getInternalPlayer().pauseVideo() : player.current?.getInternalPlayer().playVideo();
-                    }
-                    if (state === 5 && paused) {
-                        player.current?.getInternalPlayer().playVideo();
-                    }
+    return <>
+        <div className={styles["div-empty"]} />
+        <div {...props} className={cn({ [styles["none"]]: playlist.length === 0 }, styles.player)}>
+            <YouTube
+                className={styles.none}
+                key={playlist[current] === undefined ? "" : playlist[current].videoId}
+                videoId={playlist[current] === undefined ? "" : playlist[current].videoId}
+                opts={{
+                    height: '0',
+                    width: '0'
                 }}
-            >
-                {paused ? (
-                    <PlayIcon
-                        className={styles["icon-play-pause"]}
-                    />
-                ) : (
-                    <PauseIcon
-                        className={styles["icon-play-pause"]}
-                    />
-                )}
-            </Button>
-            <Button
-                onClick={Next}
-            >
-                <SkipIcon className={styles["icon-previous-next"]} style={{
-                    transform: "rotate(180deg)"
-                }} />
-            </Button>
-        </div>
-        <div className={styles["div-volume"]}>
-            <VolumeDownIcon className={styles["icon-volume"]} style={{
-                marginRight: "16px"
-            }} />
+                ref={player}
+                onReady={handleReady}
+                onPlay={handlePlay}
+                onPause={handlePause}
+                onEnd={Next}
+            />
+            <div className={styles["div-top"]}>
+                <Image alt={playlist[current] === undefined ? "" : playlist[current].title} src={playlist[current] === undefined ? "https://lh3.googleusercontent.com" : playlist[current].thumbnail?.[0].url as string} width={100} height={100} className={styles["cover-image"]} />
+                <div className={styles["div-top-texts"]}>
+                    <p className={styles.album}>{playlist[current] === undefined ? "" : isNotAlbum(playlist[current])}</p>
+                    <b className={styles.name}>{playlist[current] === undefined ? "" : playlist[current].title}</b>
+                    <p className={styles.artists}>{playlist[current] === undefined ? "" : playlist[current].artists?.[0].name}</p>
+                </div>
+            </div>
             <Range
-                step={1}
+                step={0.001}
                 min={0}
-                max={100}
-                values={[volume]}
-                onChange={(values): void => { setVolume(values[0]); player.current?.getInternalPlayer().setVolume(values[0]); }}
+                max={0.999999}
+                values={[played]}
+                onChange={(values): void => setPlayed(values[0])}
                 renderTrack={({ props, children }): JSX.Element => (
                     <div
-                        onMouseDown={props.onMouseDown}
+                        onMouseDown={(e): void => { props.onMouseDown(e); handleSeekMouseDown(); }}
                         onTouchStart={props.onTouchStart}
                         className={styles["line"]}
                     >
@@ -221,10 +149,10 @@ export const Player = ({ ...props }: PlayerProps): JSX.Element => {
                             className={styles["indicator"]}
                             style={{
                                 background: getTrackBackground({
-                                    values: [volume],
-                                    colors: ["#000000DE", "#00000061"],
+                                    values: [played],
+                                    colors: ["black", "#00000047"],
                                     min: 0,
-                                    max: 100
+                                    max: 0.999999
                                 }),
                             }}
                         >
@@ -235,13 +163,91 @@ export const Player = ({ ...props }: PlayerProps): JSX.Element => {
                 renderThumb={({ props }): JSX.Element => (
                     <div
                         {...props}
-                        className={styles["valume-thumb"]}
+                        className={styles["time-thumb"]}
                     />
                 )}
             />
-            <VolumeUpIcon className={styles["icon-volume"]} style={{
-                marginLeft: "16px"
-            }} />
-        </div>
-    </div >;
+            <div className={styles["div-duration"]}>
+                <Duration seconds={duration * played} />
+                <Duration seconds={duration * (1 - played)} />
+            </div>
+            <div className={styles["div-buttons"]}>
+                <Button
+                    onClick={Prev}
+                >
+                    <SkipIcon className={styles["icon-previous-next"]} />
+                </Button>
+                <Button
+                    onClick={async (): Promise<void> => {
+                        const state = await player.current?.getInternalPlayer().getPlayerState();
+                        if (state === 1 || state === 2) {
+                            !paused ? player.current?.getInternalPlayer().pauseVideo() : player.current?.getInternalPlayer().playVideo();
+                        }
+                        if (state === 5 && paused) {
+                            player.current?.getInternalPlayer().playVideo();
+                        }
+                    }}
+                >
+                    {paused ? (
+                        <PlayIcon
+                            className={styles["icon-play-pause"]}
+                        />
+                    ) : (
+                        <PauseIcon
+                            className={styles["icon-play-pause"]}
+                        />
+                    )}
+                </Button>
+                <Button
+                    onClick={Next}
+                >
+                    <SkipIcon className={styles["icon-previous-next"]} style={{
+                        transform: "rotate(180deg)"
+                    }} />
+                </Button>
+            </div>
+            <div className={styles["div-volume"]}>
+                <VolumeDownIcon className={styles["icon-volume"]} style={{
+                    marginRight: "16px"
+                }} />
+                <Range
+                    step={1}
+                    min={0}
+                    max={100}
+                    values={[volume]}
+                    onChange={(values): void => { setVolume(values[0]); player.current?.getInternalPlayer().setVolume(values[0]); }}
+                    renderTrack={({ props, children }): JSX.Element => (
+                        <div
+                            onMouseDown={props.onMouseDown}
+                            onTouchStart={props.onTouchStart}
+                            className={styles["line"]}
+                        >
+                            <div
+                                ref={props.ref}
+                                className={styles["indicator"]}
+                                style={{
+                                    background: getTrackBackground({
+                                        values: [volume],
+                                        colors: ["#000000DE", "#00000061"],
+                                        min: 0,
+                                        max: 100
+                                    }),
+                                }}
+                            >
+                                {children}
+                            </div>
+                        </div>
+                    )}
+                    renderThumb={({ props }): JSX.Element => (
+                        <div
+                            {...props}
+                            className={styles["valume-thumb"]}
+                        />
+                    )}
+                />
+                <VolumeUpIcon className={styles["icon-volume"]} style={{
+                    marginLeft: "16px"
+                }} />
+            </div>
+        </div ></>;
 };
