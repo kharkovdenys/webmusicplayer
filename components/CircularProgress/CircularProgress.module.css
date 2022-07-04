@@ -42,3 +42,10 @@
   stroke-dashoffset: 0;
   stroke-width: 3.6px;
 }
+
+.for-list {
+  position: fixed;
+  left: 50%;
+  margin-top: 40px;
+  margin-left: -25px;
+}

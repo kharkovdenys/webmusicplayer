@@ -1,6 +1,6 @@
 import { DetailedHTMLProps, HTMLAttributes } from 'react';
-import { Music } from '../../interfaces/music.interface';
+import { Music, MusicMix } from '../../interfaces/music.interface';
 
 export interface CustomListProps extends DetailedHTMLProps<HTMLAttributes<HTMLUListElement>, HTMLUListElement> {
-    musics: Music[]
+    musics: Music[] | MusicMix[];
 }

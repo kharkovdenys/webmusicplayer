@@ -14,4 +14,8 @@ export interface ThumbnailEntity {
     height: number;
     url: string;
     width: number;
-}  
+}
+export interface MusicMix {
+    related: string;
+    tracks: Music[];
+}

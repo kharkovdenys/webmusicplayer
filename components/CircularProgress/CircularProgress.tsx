@@ -3,6 +3,6 @@ import CircularProgressSVG from "./circularprogress.svg";
 import { CircularProgressProps } from "./CircularProgress.props";
 import cn from "classnames";
 
-export const CircularProgress = ({ className, ...props }: CircularProgressProps): JSX.Element => {
-    return <CircularProgressSVG className={cn(className, styles.svg)} {...props}></CircularProgressSVG>;
+export const CircularProgress = ({ className, variant, ...props }: CircularProgressProps): JSX.Element => {
+    return <CircularProgressSVG className={cn(className, variant ? styles[variant] : null, styles.svg)} {...props}></CircularProgressSVG>;
 };

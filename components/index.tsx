@@ -5,3 +5,5 @@ export * from "./Player/Player";
 export * from "./SearchBar/SearchBar";
 export * from "./CustomList/CustomList";
 export * from "./AuthForm/AuthForm";
+export * from "./CircularProgress/CircularProgress";
+export * from "./Banner/Banner";
