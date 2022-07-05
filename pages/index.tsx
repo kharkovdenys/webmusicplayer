@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Player, SearchBar } from '../components';
+import { Banner, Player, SearchBar } from '../components';
 import { LoginPage, RegisterPage, SearchPage, HistoryPage } from '../views';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -46,9 +46,7 @@ export default function App(): JSX.Element {
             <Route
               path="/*"
               element={
-                <>
-                  <h1>404</h1>
-                </>
+                <Banner>4😑4 Page Not Found</Banner>
               }
             />
           </Routes>
