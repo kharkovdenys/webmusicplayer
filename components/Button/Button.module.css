@@ -6,15 +6,11 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  padding: 0;
-  padding: 8px;
   padding: 10px;
   border: 0;
   margin: 0;
   background-color: transparent;
-  border-radius: 0;
   border-radius: 50%;
-  color: inherit;
   color: black;
   cursor: pointer;
   outline: 0;
@@ -22,4 +18,12 @@
   text-decoration: none;
   user-select: none;
   vertical-align: middle;
+}
+
+.out {
+  border: 1px solid rgba(211, 47, 47, 0.5);
+  color: rgb(211, 47, 47);
+  padding: 5px 15px;
+  border-radius: 4px;
+  background-color: transparent;
 }

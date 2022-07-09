@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { Banner, NavDrawer } from "../../components";
+import { MyProfilePage } from "../myprofile/MyProfilePage";
 
 export const ProfilePage = (): JSX.Element => {
     return <div style={{ display: "flex" }}>
@@ -7,7 +8,7 @@ export const ProfilePage = (): JSX.Element => {
         <Routes>
             <Route
                 path="/"
-                element={<></>}
+                element={<MyProfilePage></MyProfilePage>}
             />
             <Route
                 path="myplaylists"
