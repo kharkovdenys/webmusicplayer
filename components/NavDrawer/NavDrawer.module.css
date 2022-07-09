@@ -1,0 +1,47 @@
+.link {
+  text-decoration: none;
+}
+
+.nav-drawer {
+  flex-shrink: 0;
+  width: 25%;
+}
+
+.button {
+  vertical-align: middle;
+  appearance: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.75;
+  letter-spacing: 0.03em;
+  color: #1976d2;
+  width: 100%;
+  fill: #1976d2;
+}
+
+.button p {
+  margin: 0;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+}
+
+.button-active {
+  vertical-align: middle;
+  appearance: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.75;
+  letter-spacing: 0.03em;
+  color: #ffffff;
+  width: 100%;
+  fill: #ffffff;
+  background-color: rgb(25, 118, 210);
+  border-radius: 0%;
+}
+
+.button-active p {
+  margin: 0;
+}

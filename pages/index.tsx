@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Banner, Player, SearchBar } from '../components';
 import { LoginPage, RegisterPage, SearchPage, HistoryPage } from '../views';
+import { ProfilePage } from '../views/profile/ProfilePage';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function ClientSideRendering({ children }: any): JSX.Element {
@@ -41,6 +42,12 @@ export default function App(): JSX.Element {
               path="/login"
               element={
                 <LoginPage />
+              }
+            />
+            <Route
+              path="/profile/*"
+              element={
+                <ProfilePage></ProfilePage>
               }
             />
             <Route
