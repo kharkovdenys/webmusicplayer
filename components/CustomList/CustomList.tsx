@@ -6,6 +6,8 @@ import PlayIcon from "../Player/play.svg";
 import { AppContext } from "../../context/app.context";
 import { useContext } from "react";
 import { Music } from "../../interfaces/music.interface";
+import { getCookie } from "cookies-next";
+import axios from "axios";
 
 export function isMusic(object: unknown): object is Music {
     return Object.prototype.hasOwnProperty.call(object, "videoId");
@@ -19,7 +21,7 @@ export const CustomList = ({ musics, className, ...props }: CustomListProps): JS
                 <li
                     className={styles.li}
                     key={isMusic(music) ? music.videoId : music.tracks[0].videoId}
-                    onClick={(): void => { setCurrent?.(0); setPlaylist?.(isMusic(music) ? [music] : music.tracks); }}>
+                    onClick={(): void => { setCurrent?.(0); setPlaylist?.(isMusic(music) ? [music] : music.tracks); getCookie("token") === undefined ? null : axios.post("https://databaseandapi.azurewebsites.net/musics", { IdVideo: isMusic(music) ? music.videoId : music.tracks[0].videoId }, { headers: { Authorization: getCookie("token") ?? "" } }); }}>
                     <div className={styles["div-image"]}>
                         <Image
                             className={styles.image}
