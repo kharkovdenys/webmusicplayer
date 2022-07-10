@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { Banner, NavDrawer } from "../../components";
 import { FindUsersPage } from "../findusers/FindUsersPage";
+import { MyPlaylistPage } from "../myplaylist/MyPlaylistPage";
 import { MyProfilePage } from "../myprofile/MyProfilePage";
 
 export const ProfilePage = (): JSX.Element => {
@@ -13,7 +14,7 @@ export const ProfilePage = (): JSX.Element => {
             />
             <Route
                 path="myplaylists"
-                element={<></>}
+                element={<MyPlaylistPage></MyPlaylistPage>}
             />
             <Route
                 path="otherusers/*"
