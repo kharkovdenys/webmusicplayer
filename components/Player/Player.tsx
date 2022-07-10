@@ -108,7 +108,7 @@ export const Player = ({ ...props }: PlayerProps): JSX.Element => {
         return a.title;
     };
     return <>
-        <div className={styles["div-empty"]} />
+        {playlist.length !== 0 ? <div className={styles["div-empty"]} /> : null}
         <div {...props} className={cn({ [styles["none"]]: playlist.length === 0 }, styles.player)}>
             <YouTube
                 className={styles.none}
