@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { Banner, NavDrawer } from "../../components";
+import { FindUsersPage } from "../findusers/FindUsersPage";
 import { MyProfilePage } from "../myprofile/MyProfilePage";
 
 export const ProfilePage = (): JSX.Element => {
@@ -16,7 +17,7 @@ export const ProfilePage = (): JSX.Element => {
             />
             <Route
                 path="otherusers/*"
-                element={<></>}
+                element={<FindUsersPage></FindUsersPage>}
             />
             <Route path="/*" element={<Banner>4😑4 Page Not Found</Banner>} />
         </Routes>

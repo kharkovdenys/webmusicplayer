@@ -14,7 +14,7 @@ export const SearchBar = ({ className, ...props }: SearchBarProps): JSX.Element 
         <Link to={"/"} className={styles.link}>
             <WebLogo className={styles.logo} ></WebLogo>
         </Link>
-        <Search placeholder="Search Music" className={styles.search} />
+        <Search placeholder="Search Music" className={styles.search} pathname='/search' />
         <Button className={styles["icon-button"]} onClick={(): void => getCookie("token") === undefined ? navigate("/login") : navigate("/profile")}><PersonIcon className={styles.icon}></PersonIcon></Button>
     </div>;
 };

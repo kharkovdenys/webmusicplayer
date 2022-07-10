@@ -7,12 +7,12 @@ import SearchIcon from "./search.svg";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const Search = ({ className, placeholder, ...props }: SearchProps): JSX.Element => {
+export const Search = ({ className, placeholder, pathname, ...props }: SearchProps): JSX.Element => {
     const [search, setSearch] = useState<string>('');
     const navigate = useNavigate();
     const goToSearch = (): void => {
         navigate({
-            pathname: '/search',
+            pathname: pathname,
             search: `${search}`,
         });
         setSearch("");
