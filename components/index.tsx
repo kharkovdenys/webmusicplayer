@@ -9,3 +9,4 @@ export * from "./CircularProgress/CircularProgress";
 export * from "./Banner/Banner";
 export * from "./NavDrawer/NavDrawer";
 export * from "./Avatar/Avatar";
+export * from "./Back/Back";

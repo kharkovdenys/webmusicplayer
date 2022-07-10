@@ -33,4 +33,4 @@ export const MyProfilePage = (): JSX.Element => {
             </NavLink>
         </div >
     );
-}
+};

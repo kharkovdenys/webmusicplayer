@@ -8,7 +8,7 @@ module.exports = {
     ];
   },
   images: {
-    domains: ['lh3.googleusercontent.com', "i.ytimg.com"]
+    domains: ['lh3.googleusercontent.com', "i.ytimg.com", "yt3.ggpht.com"]
   },
   webpack(config) {
     config.module.rules.push({

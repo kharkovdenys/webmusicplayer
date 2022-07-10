@@ -3,20 +3,20 @@
 }
 
 .nav-drawer {
-  flex-shrink: 0;
   width: 25%;
+  flex-shrink: 0;
 }
 
 .button {
-  vertical-align: middle;
-  appearance: none;
-  font-weight: 500;
-  font-size: 0.875rem;
-  line-height: 1.75;
-  letter-spacing: 0.03em;
-  color: #1976d2;
   width: 100%;
+  appearance: none;
+  color: #1976d2;
   fill: #1976d2;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  line-height: 1.75;
+  vertical-align: middle;
 }
 
 .button p {
@@ -29,17 +29,17 @@
 }
 
 .button-active {
-  vertical-align: middle;
-  appearance: none;
-  font-weight: 500;
-  font-size: 0.875rem;
-  line-height: 1.75;
-  letter-spacing: 0.03em;
-  color: #ffffff;
   width: 100%;
-  fill: #ffffff;
-  background-color: rgb(25, 118, 210);
+  appearance: none;
+  background-color: rgb(25 118 210);
   border-radius: 0%;
+  color: #fff;
+  fill: #fff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  line-height: 1.75;
+  vertical-align: middle;
 }
 
 .button-active p {

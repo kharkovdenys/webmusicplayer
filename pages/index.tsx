@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Banner, Player, SearchBar } from '../components';
-import { LoginPage, RegisterPage, SearchPage, HistoryPage } from '../views';
+import { LoginPage, RegisterPage, SearchPage, HistoryPage, ItemsPlaylist } from '../views';
 import { ProfilePage } from '../views/profile/ProfilePage';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -48,6 +48,12 @@ export default function App(): JSX.Element {
               path="/profile/*"
               element={
                 <ProfilePage></ProfilePage>
+              }
+            />
+            <Route
+              path="/playlist"
+              element={
+                <ItemsPlaylist></ItemsPlaylist>
               }
             />
             <Route
