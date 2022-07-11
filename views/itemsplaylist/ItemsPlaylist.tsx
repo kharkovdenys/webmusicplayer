@@ -7,7 +7,7 @@ import { Music } from '../../interfaces/music.interface';
 
 export const ItemsPlaylist = (): JSX.Element => {
     const [musics, setMusics] = useState<Music[]>([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [image, setImage] = useState("");
     const [name, setName] = useState("");
     const [error, setError] = useState(false);
