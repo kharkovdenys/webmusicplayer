@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getCookie } from 'cookies-next';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Banner, CircularProgress } from '../../components';
+import { Banner, Button, CircularProgress, NewPlaylist } from '../../components';
 import { PlaylistList } from '../../components/PlaylistList/PlaylistList';
 import { Playlist } from '../../interfaces/playlist.interface';
 
@@ -10,6 +10,7 @@ export const MyPlaylistPage = (): JSX.Element => {
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<true | false | "token">(false);
+    const [showDialog, setShowDialog] = useState(false);
     const location = useLocation();
     useEffect(() => {
         const fetchData = async (): Promise<void> => {
@@ -37,6 +38,13 @@ export const MyPlaylistPage = (): JSX.Element => {
     } else if (error) {
         return <Banner>😑 Oops.. Something went wrong</Banner>;
     } else {
-        return <PlaylistList playlists={playlists} />;
+        return <div style={{ marginLeft: "auto", marginRight: "auto" }}>
+            <PlaylistList playlists={playlists} />
+            <Button onClick={(): void => setShowDialog(true)} style={{ marginLeft: "auto", marginRight: "auto", display: "block", backgroundColor: "rgb(25, 118, 210)", borderRadius: "4px", color: "white" }}>Add playlist</Button>
+            <NewPlaylist
+                onClose={(): void => setShowDialog(false)}
+                show={showDialog}
+            ></NewPlaylist>
+        </div>;
     }
 };

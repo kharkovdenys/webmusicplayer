@@ -10,3 +10,4 @@ export * from "./Banner/Banner";
 export * from "./NavDrawer/NavDrawer";
 export * from "./Avatar/Avatar";
 export * from "./Back/Back";
+export * from "./NewPlaylist/NewPlaylist";
