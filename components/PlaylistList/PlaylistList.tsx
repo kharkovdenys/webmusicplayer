@@ -10,7 +10,7 @@ import { AppContext } from "../../context/app.context";
 import DeletePlaylistIcon from "./deleteplaylist.svg";
 import { getCookie } from "cookies-next";
 
-export const PlaylistList = ({ playlists, className, canDelete, ...props }: CustomListProps): JSX.Element => {
+export const PlaylistList = ({ playlists, className, canDelete, update, ...props }: CustomListProps): JSX.Element => {
     const navigate = useNavigate();
     const countsong = (count: string): string => {
         if (count === "1" || count === "0") return count + " song";
@@ -45,7 +45,7 @@ export const PlaylistList = ({ playlists, className, canDelete, ...props }: Cust
                     </div>
                     <div onClick={(e): void => {
                         e.stopPropagation();
-                        axios.post("https://ytmusicsearch.azurewebsites.net/removeplaylist", { id: playlist.playlistId }, { headers: { Authorization: getCookie("token") ?? "" } }).then(() => navigate(0));
+                        axios.post("https://ytmusicsearch.azurewebsites.net/removeplaylist", { id: playlist.playlistId }, { headers: { Authorization: getCookie("token") ?? "" } }).then(() => update?.());
                     }}
                         className={canDelete ? styles.visible : styles.hidden}>
                         <DeletePlaylistIcon style={{ display: "block", width: "35px" }} />

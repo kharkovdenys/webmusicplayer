@@ -12,23 +12,23 @@ export const MyPlaylistPage = (): JSX.Element => {
     const [error, setError] = useState<true | false | "token">(false);
     const [showDialog, setShowDialog] = useState(false);
     const location = useLocation();
+    const fetchData = async (): Promise<void> => {
+        setLoading(true);
+        const token = getCookie("token")?.toString() ?? "";
+        if (token == "") {
+            setError("token");
+            setLoading(false);
+            return;
+        }
+        setError(false);
+        try {
+            axios.get("https://ytmusicsearch.azurewebsites.net/getmyplaylist", { headers: { Authorization: token } }).then((response) => { setPlaylists(response.data); setLoading(false); });
+        } catch (e) {
+            setError(true);
+            setLoading(false);
+        }
+    };
     useEffect(() => {
-        const fetchData = async (): Promise<void> => {
-            setLoading(true);
-            const token = getCookie("token")?.toString() ?? "";
-            if (token == "") {
-                setError("token");
-                setLoading(false);
-                return;
-            }
-            setError(false);
-            try {
-                axios.get("https://ytmusicsearch.azurewebsites.net/getmyplaylist", { headers: { Authorization: token } }).then((response) => { setPlaylists(response.data); setLoading(false); });
-            } catch (e) {
-                setError(true);
-                setLoading(false);
-            }
-        };
         fetchData();
     }, [location.search]);
     if (loading) {
@@ -39,10 +39,10 @@ export const MyPlaylistPage = (): JSX.Element => {
         return <Banner>😑 Oops.. Something went wrong</Banner>;
     } else {
         return <div style={{ marginLeft: "auto", marginRight: "auto" }}>
-            <PlaylistList playlists={playlists} canDelete={true} />
+            <PlaylistList playlists={playlists} canDelete={true} update={(): Promise<void> => fetchData()} />
             <Button onClick={(): void => setShowDialog(true)} style={{ marginLeft: "auto", marginRight: "auto", display: "block", backgroundColor: "rgb(25, 118, 210)", borderRadius: "4px", color: "white" }}>Add playlist</Button>
             <NewPlaylist
-                onClose={(): void => setShowDialog(false)}
+                onClose={(): void => { setShowDialog(false); fetchData(); }}
                 show={showDialog}
             ></NewPlaylist>
         </div>;
