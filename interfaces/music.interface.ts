@@ -5,6 +5,7 @@ export interface Music {
     thumbnail?: (ThumbnailEntity)[] | null;
     title: string;
     videoId: string;
+    setVideoId?: string;
 }
 export interface ArtistsEntityOrAlbum {
     id: string;
