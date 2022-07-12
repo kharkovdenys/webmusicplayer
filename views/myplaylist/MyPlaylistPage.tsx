@@ -8,7 +8,7 @@ import { Playlist } from '../../interfaces/playlist.interface';
 
 export const MyPlaylistPage = (): JSX.Element => {
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<true | false | "token">(false);
     const [showDialog, setShowDialog] = useState(false);
     const location = useLocation();

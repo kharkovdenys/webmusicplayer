@@ -7,7 +7,7 @@ import { MusicMix } from '../../interfaces/music.interface';
 
 export const HistoryPage = (): JSX.Element => {
     const [musics, setMusics] = useState<MusicMix[]>([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<true | false | "token">(false);
     const location = useLocation();
     useEffect(() => {

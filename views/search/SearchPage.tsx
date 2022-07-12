@@ -7,7 +7,7 @@ import { CircularProgress, Banner } from "./../../components";
 
 export const SearchPage = (): JSX.Element => {
     const [musics, setMusics] = useState<Music[]>([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const location = useLocation();
     useEffect(() => {

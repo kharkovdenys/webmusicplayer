@@ -7,7 +7,7 @@ import { Playlist } from '../../interfaces/playlist.interface';
 
 export const OtherUserPage = (): JSX.Element => {
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const location = useLocation();
     const name = new URLSearchParams(location.search).get("user");

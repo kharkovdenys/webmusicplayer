@@ -5,7 +5,7 @@ import { Avatar, Banner, CircularProgress, Search } from '../../components';
 
 export const FindUsersPage = (): JSX.Element => {
     const [users, setUsers] = useState<string[]>([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
