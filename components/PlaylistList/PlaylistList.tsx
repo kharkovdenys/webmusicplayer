@@ -7,8 +7,10 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext } from "react";
 import { AppContext } from "../../context/app.context";
+import DeletePlaylistIcon from "./deleteplaylist.svg";
+import { getCookie } from "cookies-next";
 
-export const PlaylistList = ({ playlists, className, ...props }: CustomListProps): JSX.Element => {
+export const PlaylistList = ({ playlists, className, canDelete, ...props }: CustomListProps): JSX.Element => {
     const navigate = useNavigate();
     const countsong = (count: string): string => {
         if (count === "1" || count === "0") return count + " song";
@@ -37,9 +39,16 @@ export const PlaylistList = ({ playlists, className, ...props }: CustomListProps
                             className={styles.play}
                         />
                     </div>
-                    <div className={styles.texts}>
+                    <div className={styles.texts} >
                         <span className={styles.title}>{playlist.title}</span>
                         <p className={styles.secondary}>{countsong(playlist.count)}</p>
+                    </div>
+                    <div onClick={(e): void => {
+                        e.stopPropagation();
+                        axios.post("https://ytmusicsearch.azurewebsites.net/removeplaylist", { id: playlist.playlistId }, { headers: { Authorization: getCookie("token") ?? "" } }).then(() => navigate(0));
+                    }}
+                        className={canDelete ? styles.visible : styles.hidden}>
+                        <DeletePlaylistIcon style={{ display: "block", width: "35px" }} />
                     </div>
                 </li>
             ))

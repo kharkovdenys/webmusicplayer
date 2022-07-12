@@ -39,7 +39,7 @@ export const MyPlaylistPage = (): JSX.Element => {
         return <Banner>😑 Oops.. Something went wrong</Banner>;
     } else {
         return <div style={{ marginLeft: "auto", marginRight: "auto" }}>
-            <PlaylistList playlists={playlists} />
+            <PlaylistList playlists={playlists} canDelete={true} />
             <Button onClick={(): void => setShowDialog(true)} style={{ marginLeft: "auto", marginRight: "auto", display: "block", backgroundColor: "rgb(25, 118, 210)", borderRadius: "4px", color: "white" }}>Add playlist</Button>
             <NewPlaylist
                 onClose={(): void => setShowDialog(false)}

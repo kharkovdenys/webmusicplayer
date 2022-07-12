@@ -1,5 +1,6 @@
 .list {
   max-width: 500px;
+  padding: 0;
   margin-right: auto;
   margin-left: auto;
 }
@@ -86,4 +87,12 @@
 
 .li:hover .play {
   opacity: 1;
+}
+
+.visible {
+  display: block;
+}
+
+.hidden {
+  display: none;
 }

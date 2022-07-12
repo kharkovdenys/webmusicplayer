@@ -47,7 +47,7 @@ export const OtherUserPage = (): JSX.Element => {
                 <p style={{ textAlign: "center", marginTop: 4, fontSize: "24px" }}>
                     Playlists
                 </p>
-                <PlaylistList playlists={playlists} />
+                <PlaylistList playlists={playlists} canDelete={false} />
             </>
         }
     </div >;
