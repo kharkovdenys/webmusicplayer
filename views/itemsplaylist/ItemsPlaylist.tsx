@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { Avatar, Back, Banner, CircularProgress, CustomList } from '../../components';
 import Image from "next/image";
 import { Music } from '../../interfaces/music.interface';
+import { getCookie } from 'cookies-next';
 
 export const ItemsPlaylist = (): JSX.Element => {
     const [musics, setMusics] = useState<Music[]>([]);
@@ -11,7 +12,10 @@ export const ItemsPlaylist = (): JSX.Element => {
     const [image, setImage] = useState("");
     const [name, setName] = useState("");
     const [error, setError] = useState(false);
+    const [update, setUpdate] = useState(false);
+    const [myPlaylist, setMyPlaylist] = useState(false);
     const location = useLocation();
+
     useEffect(() => {
         const fetchData = async (): Promise<void> => {
             setLoading(true);
@@ -30,7 +34,19 @@ export const ItemsPlaylist = (): JSX.Element => {
             }
         };
         fetchData();
+    }, [location.search, update]);
+
+    useEffect(() => {
+        const check = async (): Promise<void> => {
+            try {
+                axios.post('https://ytmusicsearch.azurewebsites.net/playlist/check', { id: new URLSearchParams(location.search).get("id") }, { headers: { Authorization: getCookie("token") ?? "" } }).then(response => { setMyPlaylist(response.data); });
+            } catch (e) {
+                setMyPlaylist(false);
+            }
+        };
+        check();
     }, [location.search]);
+
     return <div style={{ width: "100%" }}>
         <Back />
         {loading ? <CircularProgress variant='for-list' /> :
@@ -54,7 +70,7 @@ export const ItemsPlaylist = (): JSX.Element => {
                         <p style={{ textAlign: "center", marginTop: 4, fontSize: "24px" }}>
                             Musics
                         </p>
-                        <CustomList musics={musics} />
+                        <CustomList musics={musics} afterDelete={myPlaylist ? (): void => setUpdate(!update) : undefined} playlistId={new URLSearchParams(location.search).get("id") ?? ""} />
                     </>
         }
     </div>;
