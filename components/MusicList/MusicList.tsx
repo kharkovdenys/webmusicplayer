@@ -1,5 +1,5 @@
-import { CustomListProps } from "./CustomList.props";
-import styles from "./CustomList.module.css";
+import { MusicListProps } from "./MusicList.props";
+import styles from "./MusicList.module.css";
 import cn from "classnames";
 import Image from "next/image";
 import PlayIcon from "../Player/play.svg";
@@ -16,7 +16,7 @@ export function isMusic(object: unknown): object is Music {
     return Object.prototype.hasOwnProperty.call(object, "videoId");
 }
 
-export const CustomList = ({ musics, className, afterDelete, playlistId, ...props }: CustomListProps): JSX.Element => {
+export const MusicList = ({ musics, className, afterDelete, playlistId, ...props }: MusicListProps): JSX.Element => {
     const { setPlaylist, setCurrent } = useContext(AppContext);
     const [showDialog, setShowDialog] = useState(false);
     const [current, setCurrentSong] = useState("");
@@ -27,12 +27,12 @@ export const CustomList = ({ musics, className, afterDelete, playlistId, ...prop
                     <li
                         className={styles.li}
                         key={isMusic(music) ? music.videoId : music.tracks[0].videoId}
-                        onClick={(): void => { setCurrent?.(0); setPlaylist?.(isMusic(music) ? [music] : music.tracks); getCookie("token") === undefined ? null : axios.post("https://databaseandapi.azurewebsites.net/musics", { IdVideo: isMusic(music) ? music.videoId : music.tracks[0].videoId }, { headers: { Authorization: getCookie("token") ?? "" } }); }}>
+                        onClick={(): void => { setCurrent?.(0); setPlaylist?.(isMusic(music) ? [music] : music.tracks); getCookie("token") && axios.post("https://databaseandapi.azurewebsites.net/musics", { IdVideo: isMusic(music) ? music.videoId : music.tracks[0].videoId }, { headers: { Authorization: getCookie("token") ?? "" } }); }}>
                         <div className={styles["div-image"]}>
                             <Image
                                 className={styles.image}
                                 alt="Album"
-                                src={isMusic(music) ? music.thumbnail?.[0].url ?? "" : music.tracks[0].thumbnail?.[0].url ?? ""}
+                                src={(isMusic(music) ? music.thumbnail?.[0].url : music.tracks[0].thumbnail?.[0].url) ?? ""}
                                 width={40}
                                 height={40}
                             />

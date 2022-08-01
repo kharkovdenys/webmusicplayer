@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { CustomList } from '../../components';
+import { MusicList } from '../../components';
 import { Music } from '../../interfaces/music.interface';
 import { CircularProgress, Banner } from "./../../components";
 
@@ -23,6 +23,6 @@ export const SearchPage = (): JSX.Element => {
     } else if (musics.length === 0 || error) {
         return <Banner>😑 Oops.. Nothing found</Banner>;
     } else {
-        return <CustomList musics={musics} />;
+        return <MusicList musics={musics} />;
     }
 };

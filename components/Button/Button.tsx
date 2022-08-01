@@ -3,5 +3,5 @@ import styles from "./Button.module.css";
 import cn from "classnames";
 
 export const Button = ({ className, children, variant, ...props }: ButtonProps): JSX.Element => {
-    return <button className={cn(className, variant ? styles[variant] : null, styles.button)} {...props}>{children}</button>;
+    return <button className={cn(className, variant && styles[variant], styles.button)} {...props}>{children}</button>;
 };

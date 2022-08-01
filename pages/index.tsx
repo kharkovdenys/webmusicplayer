@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { DetailedHTMLProps, HTMLAttributes, useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Banner, Player, SearchBar } from '../components';
 import { LoginPage, RegisterPage, SearchPage, HistoryPage, ItemsPlaylist, OtherUserPage } from '../views';
 import { ProfilePage } from '../views/profile/ProfilePage';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function ClientSideRendering({ children }: any): JSX.Element {
+function ClientSideRendering({ children }: DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>): JSX.Element {
   const [csrReady, setCsrReady] = useState(false);
   useEffect(() => {
     setCsrReady(true);
   }, []);
-  return csrReady ? children : null;
+  return (csrReady && children) as JSX.Element;
 }
 
 export default function App(): JSX.Element {

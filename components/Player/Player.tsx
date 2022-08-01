@@ -1,4 +1,3 @@
-import { PlayerProps } from "./Player.props";
 import { useRef, useState, useEffect, useContext } from "react";
 import styles from "./Player.module.css";
 import YouTube, { YouTubeEvent } from "react-youtube";
@@ -14,8 +13,9 @@ import VolumeDownIcon from "./volumedown.svg";
 import { AppContext } from "../../context/app.context";
 import cn from "classnames";
 import axios from "axios";
+import { Music } from "../../interfaces/music.interface";
 
-export const Player = ({ ...props }: PlayerProps): JSX.Element => {
+export const Player = (): JSX.Element => {
     const { playlist, current, setCurrent, setPlaylist } = useContext(AppContext);
     const [duration, setDuration] = useState<number>(0);
     const [played, setPlayed] = useState<number>(0);
@@ -95,21 +95,13 @@ export const Player = ({ ...props }: PlayerProps): JSX.Element => {
             setCurrent?.(current - 1);
         }
     };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const isNotAlbum = (a: any): string => {
-        let found = false;
-        for (let i = 0; i < +a.length; i++) {
-            if (a[i] === "album") {
-                found = true;
-                break;
-            }
-        }
-        if (found) return a.album.name;
+    const isNotAlbum = (a: Music): string => {
+        if (Object.prototype.hasOwnProperty.call(a, "album")) return a.album.name;
         return a.title;
     };
     return <>
-        {playlist.length !== 0 ? <div className={styles["div-empty"]} /> : null}
-        <div {...props} className={cn({ [styles["none"]]: playlist.length === 0 }, styles.player)}>
+        {playlist.length !== 0 && <div className={styles["div-empty"]} />}
+        <div className={cn({ [styles["none"]]: playlist.length === 0 }, styles.player)}>
             <YouTube
                 className={styles.none}
                 key={playlist[current] === undefined ? "" : playlist[current].videoId}

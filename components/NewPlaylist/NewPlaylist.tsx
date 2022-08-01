@@ -20,7 +20,7 @@ export const NewPlaylist = ({ show, onClose }: NewPlaylistProps): JSX.Element =>
         onClose();
     };
 
-    const modalContent = show ? (
+    const modalContent = show && (
         <div className={styles["modal-overlay"]} role="presentation">
             <div className={styles.modal}>
                 <h2>New playlist</h2>
@@ -44,14 +44,8 @@ export const NewPlaylist = ({ show, onClose }: NewPlaylistProps): JSX.Element =>
                 </form>
             </div>
         </div >
-    ) : null;
+    );
 
-    if (isBrowser) {
-        return ReactDOM.createPortal(
-            modalContent,
-            document.getElementById("modal-root") as Element
-        );
-    } else {
-        return <></>;
-    }
+    return isBrowser ? ReactDOM.createPortal(modalContent,
+        document.getElementById("modal-root") as Element) : <></>;
 };

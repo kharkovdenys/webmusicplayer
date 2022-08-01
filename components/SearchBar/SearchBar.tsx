@@ -1,4 +1,4 @@
-import { SearchBarProps } from "./SearchBar.props";
+import { DetailedHTMLProps, HTMLAttributes } from 'react';
 import { Button } from "../Button/Button";
 import { Search } from "../Search/Search";
 import WebLogo from "./webplayer.svg";
@@ -8,7 +8,7 @@ import cn from "classnames";
 import { Link, useNavigate } from "react-router-dom";
 import { getCookie } from "cookies-next";
 
-export const SearchBar = ({ className, ...props }: SearchBarProps): JSX.Element => {
+export const SearchBar = ({ className, ...props }: DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>): JSX.Element => {
     const navigate = useNavigate();
     return <div className={cn(className, styles.searchbar)} {...props} >
         <Link to={"/"} className={styles.link}>

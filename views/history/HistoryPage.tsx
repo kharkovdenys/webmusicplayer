@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getCookie } from 'cookies-next';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Banner, CircularProgress, CustomList } from '../../components';
+import { Banner, CircularProgress, MusicList } from '../../components';
 import { MusicMix } from '../../interfaces/music.interface';
 
 export const HistoryPage = (): JSX.Element => {
@@ -42,6 +42,6 @@ export const HistoryPage = (): JSX.Element => {
     } else if (musics.length === 0) {
         return <Banner>😑 Oops.. Your history is empty</Banner>;
     } else {
-        return <CustomList musics={musics} />;
+        return <MusicList musics={musics} />;
     }
 };

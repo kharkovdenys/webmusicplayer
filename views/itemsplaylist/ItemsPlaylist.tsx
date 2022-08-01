@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Avatar, Back, Banner, CircularProgress, CustomList } from '../../components';
+import { Avatar, Back, Banner, CircularProgress, MusicList } from '../../components';
 import Image from "next/image";
 import { Music } from '../../interfaces/music.interface';
 import { getCookie } from 'cookies-next';
@@ -70,7 +70,7 @@ export const ItemsPlaylist = (): JSX.Element => {
                         <p style={{ textAlign: "center", marginTop: 4, fontSize: "24px" }}>
                             Musics
                         </p>
-                        <CustomList musics={musics} afterDelete={myPlaylist ? (): void => setUpdate(!update) : undefined} playlistId={new URLSearchParams(location.search).get("id") ?? ""} />
+                        <MusicList musics={musics} afterDelete={myPlaylist ? (): void => setUpdate(!update) : undefined} playlistId={new URLSearchParams(location.search).get("id") ?? ""} />
                     </>
         }
     </div>;

@@ -3,7 +3,7 @@ export * from "./Button/Button";
 export * from "./Input/Input";
 export * from "./Player/Player";
 export * from "./SearchBar/SearchBar";
-export * from "./CustomList/CustomList";
+export * from "./MusicList/MusicList";
 export * from "./AuthForm/AuthForm";
 export * from "./CircularProgress/CircularProgress";
 export * from "./Banner/Banner";

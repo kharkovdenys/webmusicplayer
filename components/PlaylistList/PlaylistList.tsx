@@ -1,4 +1,4 @@
-import { CustomListProps } from "./PlaylistList.props";
+import { PlaylistListProps } from "./PlaylistList.props";
 import styles from "./PlaylistList.module.css";
 import cn from "classnames";
 import Image from "next/image";
@@ -10,7 +10,7 @@ import { AppContext } from "../../context/app.context";
 import DeletePlaylistIcon from "./deleteplaylist.svg";
 import { getCookie } from "cookies-next";
 
-export const PlaylistList = ({ playlists, className, canDelete, update, ...props }: CustomListProps): JSX.Element => {
+export const PlaylistList = ({ playlists, className, canDelete, update, ...props }: PlaylistListProps): JSX.Element => {
     const navigate = useNavigate();
     const countsong = (count: string): string => {
         if (count === "1" || count === "0") return count + " song";
