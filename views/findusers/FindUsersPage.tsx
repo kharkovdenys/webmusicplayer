@@ -30,7 +30,7 @@ export const FindUsersPage = (): JSX.Element => {
         fetchData();
     }, [location.search]);
     return <div style={{ width: "100%" }}>
-        <Search style={{ width: "400px", marginTop: "20px", marginLeft: "auto", marginRight: "auto", backgroundColor: "#909be9" }} placeholder={'Search Users'} pathname="user" />
+        <Search style={{ maxWidth: "400px", marginTop: "20px", marginLeft: "auto", marginRight: "auto", backgroundColor: "#909be9" }} placeholder={'Search Users'} pathname="user" />
         {location.search === "" ? null :
             loading ? <CircularProgress style={{ marginLeft: "auto", marginRight: "auto", display: "block", marginTop: "40px" }} /> :
                 error ? <Banner>😑 Oops.. Something went wrong</Banner> :
