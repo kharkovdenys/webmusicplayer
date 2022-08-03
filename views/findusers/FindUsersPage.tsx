@@ -17,7 +17,7 @@ export const FindUsersPage = (): JSX.Element => {
                 return;
             }
             try {
-                axios.post('https://databaseandapi.azurewebsites.net/user', { username: location.search.substring(1) }).then(response => {
+                axios.post('https://databaseandapi.azurewebsites.net/user', { UserName: location.search.substring(1) }).then(response => {
                     setUsers(response.data);
                     setLoading(false);
                 });
@@ -30,7 +30,7 @@ export const FindUsersPage = (): JSX.Element => {
     }, [location.search]);
     return <div style={{ width: "100%" }}>
         <Search style={{ maxWidth: "400px", marginTop: "20px", marginLeft: "auto", marginRight: "auto", backgroundColor: "#909be9" }} placeholder={'Search Users'} pathname="user" />
-        {location.search !== "" ? null :
+        {location.search === "" ? null :
             loading ? <CircularProgress style={{ marginLeft: "auto", marginRight: "auto", display: "block", marginTop: "40px" }} /> :
                 error ? <Banner>😑 Oops.. Something went wrong</Banner> :
                     users.length === 0 ? <Banner>😑 Oops.. Nothing found</Banner> :
