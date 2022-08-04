@@ -11,7 +11,7 @@
 
 ## Common setup
 
-Clone the repo and install the dependencies.
+Clone the repo and install the dependencies
 
 ```bash
 git clone https://github.com/kharkovdenys/webmusicplayer.git
@@ -30,4 +30,4 @@ To start the site, run the following
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) and take a look around.
+Open [http://localhost:3000](http://localhost:3000) and take a look around
