@@ -37,7 +37,7 @@ export const MyProfilePage = (): JSX.Element => {
             }
             <NavLink to="/" style={{ textDecoration: "none", marginTop: "10px" }}>
                 <Button variant="out" onClick={(): void => { deleteCookie("token"); navigate("/"); }}>
-                    Sing Out
+                    Log out
                 </Button>
             </NavLink>
         </div >
