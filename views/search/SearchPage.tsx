@@ -13,7 +13,7 @@ export const SearchPage = (): JSX.Element => {
     useEffect(() => {
         setLoading(true);
         setError(false);
-        axios.post('https://ytmusicsearch.azurewebsites.net/search', { query: location.search.substring(1) }).then(response => {
+        axios.post('https://ytmusicsearch.azurewebsites.net/search', { query: decodeURIComponent(location.search.substring(1)) }).then(response => {
             setMusics(response.data);
             setLoading(false);
         }).catch(() => { setError(true); setLoading(false); });

@@ -17,7 +17,7 @@ export const FindUsersPage = (): JSX.Element => {
                 return;
             }
             try {
-                axios.post('https://databaseandapi.azurewebsites.net/user', { UserName: location.search.substring(1) }).then(response => {
+                axios.post('https://databaseandapi.azurewebsites.net/user', { UserName: decodeURIComponent(location.search.substring(1)) }).then(response => {
                     setUsers(response.data);
                     setLoading(false);
                 });
