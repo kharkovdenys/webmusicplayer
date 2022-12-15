@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { CircularProgress } from "../CircularProgress/CircularProgress";
 import { Button, Input } from "../index";
 import AccountIcon from "./account.svg";
@@ -8,8 +8,7 @@ import { AuthFormProps } from "./AuthForm.props";
 export const AuthForm = ({ variant, register, handleSubmit, Submit, loading }: AuthFormProps): JSX.Element => {
     return (
         <div>
-            <AccountIcon className={styles.icon}
-            ></AccountIcon>
+            <AccountIcon className={styles.icon} />
             <p className={styles.text}>
                 {variant === "register" ? "Sign Up" : "Sign In"}</p>
             <form
@@ -39,7 +38,7 @@ export const AuthForm = ({ variant, register, handleSubmit, Submit, loading }: A
                 < Button type="submit" className={styles.button}>
                     {variant === "register" ? "Register" : "Login"}
                 </Button>
-                <Link to={variant === "register" ? "/login" : "/register"} className={styles.link}>
+                <Link href={variant === "register" ? "/login" : "/register"} className={styles.link}>
                     {variant === "register" ? "Sign In" : "Sign Up"}
                 </Link>
             </form>

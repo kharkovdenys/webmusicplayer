@@ -1,3 +1,4 @@
+"use client";
 import { useRef, useState, useEffect, useContext } from "react";
 import styles from "./Player.module.css";
 import YouTube, { YouTubeEvent } from "react-youtube";
@@ -23,12 +24,15 @@ export const Player = (): JSX.Element => {
     const [volume, setVolume] = useState<number>(30);
     const [seeking, setSeeking] = useState<boolean>(false);
     const player = useRef<YouTube>(null);
+
     useEffect(() => {
         setVolume(parseInt(window.localStorage.getItem("volume") ?? "30"));
     }, []);
+
     useEffect(() => {
         window.localStorage.setItem("volume", volume.toString());
     }, [volume]);
+
     useEffect(() => {
         const interval = setInterval(async () => {
             if (!seeking) {
@@ -132,12 +136,13 @@ export const Player = (): JSX.Element => {
                 onChange={(values): void => setPlayed(values[0])}
                 renderTrack={({ props, children }): JSX.Element => (
                     <div
+                        key='Line1'
                         onMouseDown={(e): void => { props.onMouseDown(e); handleSeekMouseDown(); }}
                         onTouchStart={props.onTouchStart}
-                        className={styles["line"]}
-                    >
+                        className={styles["line"]}>
                         <div
                             ref={props.ref}
+                            key='Indicator1'
                             className={styles["indicator"]}
                             style={{
                                 background: getTrackBackground({
@@ -155,6 +160,7 @@ export const Player = (): JSX.Element => {
                 renderThumb={({ props }): JSX.Element => (
                     <div
                         {...props}
+                        key='Thumb1'
                         className={styles["time-thumb"]}
                     />
                 )}
@@ -210,11 +216,13 @@ export const Player = (): JSX.Element => {
                     onChange={(values): void => { setVolume(values[0]); player.current?.getInternalPlayer().setVolume(values[0]); }}
                     renderTrack={({ props, children }): JSX.Element => (
                         <div
+                            key='Line2'
                             onMouseDown={props.onMouseDown}
                             onTouchStart={props.onTouchStart}
                             className={styles["line"]}
                         >
                             <div
+                                key='Indicator2'
                                 ref={props.ref}
                                 className={styles["indicator"]}
                                 style={{
@@ -233,6 +241,7 @@ export const Player = (): JSX.Element => {
                     renderThumb={({ props }): JSX.Element => (
                         <div
                             {...props}
+                            key='Thumb2'
                             className={styles["valume-thumb"]}
                         />
                     )}
@@ -241,5 +250,6 @@ export const Player = (): JSX.Element => {
                     marginLeft: "16px"
                 }} />
             </div>
-        </div ></>;
+        </div >
+    </>;
 };

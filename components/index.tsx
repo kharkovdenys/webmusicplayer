@@ -11,3 +11,4 @@ export * from "./NavDrawer/NavDrawer";
 export * from "./Avatar/Avatar";
 export * from "./Back/Back";
 export * from "./NewPlaylist/NewPlaylist";
+export * from "./PlaylistList/PlaylistList";

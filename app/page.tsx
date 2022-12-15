@@ -1,17 +1,19 @@
+"use client";
 import axios from 'axios';
 import { getCookie } from 'cookies-next';
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import { Banner, CircularProgress, MusicList } from '../../components';
-import { MusicMix } from '../../interfaces/music.interface';
+import { Banner, CircularProgress, MusicList } from '../components';
+import { MusicMix } from '../interfaces/music.interface';
 
-export const HistoryPage = (): JSX.Element => {
+export default function HistoryPage(): JSX.Element {
     const [musics, setMusics] = useState<MusicMix[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<true | false | "token">(false);
-    const location = useLocation();
+
     useEffect(() => {
-        const fetchData = async (): Promise<void> => {
+        const controller = new AbortController();
+
+        async function startFetching(): Promise<void> {
             setLoading(true);
             const token = getCookie("token")?.toString() ?? "";
             if (token == "") {
@@ -21,18 +23,30 @@ export const HistoryPage = (): JSX.Element => {
             }
             setError(false);
             try {
-                const { data } = await axios.get("https://databaseandapi.azurewebsites.net/musics", { headers: { Authorization: token } });
-                axios.post('https://ytmusicsearch.azurewebsites.net/getmusicmix', data).then(response => {
+                const { data } = await axios.get("https://databaseandapi.azurewebsites.net/musics", { signal: controller.signal, headers: { Authorization: token } });
+                axios.post('https://ytmusicsearch.azurewebsites.net/getmusicmix', data, { signal: controller.signal }).then(response => {
                     setMusics(response.data);
                     setLoading(false);
+                }).catch((e) => {
+                    if (!axios.isCancel(e)) {
+                        setError(true);
+                        setLoading(false);
+                    }
                 });
-            } catch (e) {
-                setError(true);
-                setLoading(false);
             }
-        };
-        fetchData();
-    }, [location.search]);
+            catch (e) {
+                if (!axios.isCancel(e)) {
+                    setError(true);
+                    setLoading(false);
+                }
+            }
+        }
+
+        startFetching();
+
+        return () => { controller.abort(); };
+    }, []);
+
     if (loading) {
         return <CircularProgress variant='for-list' />;
     } else if (error === "token") {
@@ -44,4 +58,4 @@ export const HistoryPage = (): JSX.Element => {
     } else {
         return <MusicList musics={musics} />;
     }
-};
+}

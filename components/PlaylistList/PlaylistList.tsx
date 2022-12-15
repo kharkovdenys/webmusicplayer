@@ -3,7 +3,7 @@ import styles from "./PlaylistList.module.css";
 import cn from "classnames";
 import Image from "next/image";
 import PlayIcon from "../Player/play.svg";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from 'next/navigation';
 import axios from "axios";
 import { useContext } from "react";
 import { AppContext } from "../../context/app.context";
@@ -11,7 +11,7 @@ import DeletePlaylistIcon from "./deleteplaylist.svg";
 import { getCookie } from "cookies-next";
 
 export const PlaylistList = ({ playlists, className, canDelete, update, ...props }: PlaylistListProps): JSX.Element => {
-    const navigate = useNavigate();
+    const router = useRouter();
     const countsong = (count: string): string => {
         if (count === "1" || count === "0") return count + " song";
         return count + " songs";
@@ -23,7 +23,7 @@ export const PlaylistList = ({ playlists, className, canDelete, update, ...props
                 <li
                     className={styles.li}
                     key={playlist.playlistId}
-                    onClick={(): void => { navigate("/playlist?id=" + playlist.playlistId); }}>
+                    onClick={(): void => { router.push("/playlist?id=" + playlist.playlistId); }}>
                     <div className={styles["div-image"]} onClick={(e): void => {
                         e.stopPropagation();
                         axios.post("https://ytmusicsearch.azurewebsites.net/getmusicfromplaylist", { id: playlist.playlistId }).then((response) => { setPlaylist?.(response.data.tracks); });

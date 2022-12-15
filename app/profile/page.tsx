@@ -1,19 +1,30 @@
+"use client";
 import axios from "axios";
 import { deleteCookie, getCookie } from "cookies-next";
 import { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import Link from "next/link";
 import { Avatar, Banner, Button, CircularProgress } from "../../components";
+import { useRouter } from "next/navigation";
 
-export const MyProfilePage = (): JSX.Element => {
+export default function MyProfilePage(): JSX.Element {
     const [name, setName] = useState("");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
-    const navigate = useNavigate();
+    const router = useRouter();
     useEffect(() => {
+        const controller = new AbortController();
+
         setError(false);
-        axios.get("https://databaseandapi.azurewebsites.net/info", { headers: { Authorization: getCookie("token") ?? "" } }).then((name) => {
+        axios.get("https://databaseandapi.azurewebsites.net/info", { signal: controller.signal, headers: { Authorization: getCookie("token") ?? "" } }).then((name) => {
             setName(name.data); setLoading(false);
-        }).catch(() => { setLoading(false); setError(true); });
+        }).catch((e) => {
+            if (!axios.isCancel(e)) {
+                setError(true);
+                setLoading(false);
+            }
+        });
+
+        return () => { controller.abort(); };
     }, []);
     return (
         <div style={{ marginLeft: "auto", marginRight: "auto", alignItems: "center", justifyItems: "center", display: "flex", flexDirection: "column" }}>
@@ -35,11 +46,11 @@ export const MyProfilePage = (): JSX.Element => {
                             {name}
                         </p></> : <CircularProgress style={{ marginTop: "43.5px", marginBottom: "43.5px" }} />
             }
-            <NavLink to="/" style={{ textDecoration: "none", marginTop: "10px" }}>
-                <Button variant="out" onClick={(): void => { deleteCookie("token"); navigate("/"); }}>
+            <Link href="/" style={{ textDecoration: "none", marginTop: "10px" }}>
+                <Button variant="out" onClick={(): void => { deleteCookie("token"); router.push("/"); }}>
                     Log out
                 </Button>
-            </NavLink>
+            </Link>
         </div >
     );
-};
+}

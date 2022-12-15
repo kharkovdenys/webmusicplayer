@@ -1,13 +1,12 @@
-import { useNavigate, useNavigationType } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import styles from "./Back.module.css";
 import BackIcon from "./back.svg";
 
 export const Back = (): JSX.Element => {
-    const navigate = useNavigate();
-    const NavigationType = useNavigationType();
+    const router = useRouter();
     return (
         <BackIcon
-            onClick={(): void => NavigationType === "PUSH" ? navigate(-1) : navigate("/")}
+            onClick={(): void => router.back()}
             className={styles.back}
         />
     );

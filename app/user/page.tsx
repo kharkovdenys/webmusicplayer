@@ -1,29 +1,35 @@
+"use client";
 import axios from 'axios';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import { Avatar, Back, Banner, CircularProgress } from '../../components';
 import { PlaylistList } from '../../components/PlaylistList/PlaylistList';
 import { Playlist } from '../../interfaces/playlist.interface';
 
-export const OtherUserPage = (): JSX.Element => {
+export default function OtherUserPage(): JSX.Element {
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
-    const location = useLocation();
-    const name = new URLSearchParams(location.search).get("user");
+    const searchParams = useSearchParams();
+    const name = searchParams.get("user");
     useEffect(() => {
-        const fetchData = async (): Promise<void> => {
+        const controller = new AbortController();
+
+        async function startFetching(): Promise<void> {
             setLoading(true);
             setError(false);
-            try {
-                axios.post("https://ytmusicsearch.azurewebsites.net/getotheruserplaylist", { name: name }).then((response) => { setPlaylists(response.data); setLoading(false); });
-            } catch (e) {
-                setError(true);
+            axios.post("https://ytmusicsearch.azurewebsites.net/getotheruserplaylist", { name: name }, { signal: controller.signal }).then((response) => { setPlaylists(response.data); setLoading(false); }).catch((e) => {
+                if (!axios.isCancel(e))
+                    setError(true);
                 setLoading(false);
-            }
-        };
-        fetchData();
-    }, [location.search, name]);
+            });
+        }
+
+        startFetching();
+
+        return () => { controller.abort(); };
+    }, [name]);
+
     return <div style={{ width: "100%" }}>
         <Back />
         {loading ? <CircularProgress variant='for-list' /> :
@@ -51,4 +57,4 @@ export const OtherUserPage = (): JSX.Element => {
             </>
         }
     </div >;
-};
+}

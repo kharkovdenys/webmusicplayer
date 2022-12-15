@@ -1,3 +1,4 @@
+"use client";
 import { MusicListProps } from "./MusicList.props";
 import styles from "./MusicList.module.css";
 import cn from "classnames";

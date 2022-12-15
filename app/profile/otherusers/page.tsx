@@ -1,36 +1,43 @@
+"use client";
 import axios from 'axios';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { Avatar, Banner, CircularProgress, Search } from '../../components';
+import { Avatar, Banner, CircularProgress, Search } from '../../../components';
 
-export const FindUsersPage = (): JSX.Element => {
+export default function FindUsersPage(): JSX.Element {
     const [users, setUsers] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
-    const location = useLocation();
-    const navigate = useNavigate();
+    const searchParams = useSearchParams();
+    const router = useRouter();
     useEffect(() => {
-        const fetchData = async (): Promise<void> => {
+        const controller = new AbortController();
+
+        async function startFetching(): Promise<void> {
             setLoading(true);
             setError(false);
-            if (location.search === "") {
+            if (!searchParams.get('') || searchParams.get('') === null) {
                 return;
             }
-            try {
-                axios.post('https://databaseandapi.azurewebsites.net/user', { UserName: decodeURIComponent(location.search.substring(1)) }).then(response => {
-                    setUsers(response.data);
-                    setLoading(false);
-                });
-            } catch (e) {
-                setError(true);
+            axios.post('https://databaseandapi.azurewebsites.net/user', { UserName: searchParams.get('') }, { signal: controller.signal }).then(response => {
+                setUsers(response.data);
                 setLoading(false);
-            }
-        };
-        fetchData();
-    }, [location.search]);
+            }).catch((e) => {
+                if (!axios.isCancel(e)) {
+                    setError(true);
+                    setLoading(false);
+                }
+            });
+        }
+
+        startFetching();
+
+        return () => { controller.abort(); };
+    }, [searchParams]);
+
     return <div style={{ width: "100%" }}>
-        <Search style={{ maxWidth: "400px", marginTop: "20px", marginLeft: "auto", marginRight: "auto", backgroundColor: "#909be9" }} placeholder={'Search Users'} pathname="user" />
-        {location.search === "" ? null :
+        <Search style={{ maxWidth: "400px", marginTop: "20px", marginLeft: "auto", marginRight: "auto", backgroundColor: "#909be9" }} placeholder={'Search Users'} pathname="/profile/otherusers" />
+        {searchParams.get('') === "" || searchParams.get('') === null ? null :
             loading ? <CircularProgress style={{ marginLeft: "auto", marginRight: "auto", display: "block", marginTop: "40px" }} /> :
                 error ? <Banner>😑 Oops.. Something went wrong</Banner> :
                     users.length === 0 ? <Banner>😑 Oops.. Nothing found</Banner> :
@@ -50,7 +57,7 @@ export const FindUsersPage = (): JSX.Element => {
                                     }}
                                     key={user}
                                     onClick={(): void => {
-                                        navigate("/user?user=" + user);
+                                        router.push("/user?user=" + user);
                                     }}
                                 >
                                     <Avatar style={{ marginTop: "auto", marginBottom: "auto" }}>
@@ -62,4 +69,4 @@ export const FindUsersPage = (): JSX.Element => {
                         </ul>
         }
     </div >;
-};
+}

@@ -1,14 +1,12 @@
-module.exports = {
-  async rewrites() {
-    return [
-      {
-        source: '/:any*',
-        destination: '/',
-      },
-    ];
-  },
+/**
+ * @type {import('next').NextConfig}
+ */
+const nextConfig = {
   images: {
     domains: ['lh3.googleusercontent.com', "i.ytimg.com", "yt3.ggpht.com"]
+  },
+  experimental: {
+    appDir: true,
   },
   webpack(config) {
     config.module.rules.push({
@@ -20,3 +18,5 @@ module.exports = {
     return config;
   },
 };
+
+export default nextConfig;
