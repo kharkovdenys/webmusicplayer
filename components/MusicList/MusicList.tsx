@@ -3,15 +3,13 @@ import { MusicListProps } from "./MusicList.props";
 import styles from "./MusicList.module.css";
 import cn from "classnames";
 import Image from "next/image";
-import PlayIcon from "../Player/play.svg";
 import { AppContext } from "../../context/app.context";
 import { useContext, useState } from "react";
 import { Music } from "../../interfaces/music.interface";
 import { getCookie } from "cookies-next";
 import axios from "axios";
 import { PlaylistDialog } from "../PlaylistDialog/PlaylistDialog";
-import AddToPlaylistIcon from "./addtoplaylist.svg";
-import RemoveFromPlaylistIcon from "./removefromplaylist.svg";
+import { AddToPlaylistIcon, RemoveFromPlaylistIcon, PlayIcon } from "../../public/static/svg";
 
 export function isMusic(object: unknown): object is Music {
     return Object.prototype.hasOwnProperty.call(object, "videoId");

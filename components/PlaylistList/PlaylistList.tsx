@@ -2,12 +2,11 @@ import { PlaylistListProps } from "./PlaylistList.props";
 import styles from "./PlaylistList.module.css";
 import cn from "classnames";
 import Image from "next/image";
-import PlayIcon from "../Player/play.svg";
 import { useRouter } from 'next/navigation';
 import axios from "axios";
 import { useContext } from "react";
 import { AppContext } from "../../context/app.context";
-import DeletePlaylistIcon from "./deleteplaylist.svg";
+import { PlayIcon, DeletePlaylistIcon } from "../../public/static/svg";
 import { getCookie } from "cookies-next";
 
 export const PlaylistList = ({ playlists, className, canDelete, update, ...props }: PlaylistListProps): JSX.Element => {

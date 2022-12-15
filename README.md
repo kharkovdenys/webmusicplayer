@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/kharkovdenys/webmusicplayer/next.js/components/SearchBar/webplayer.svg" height="128" style="background-color: black;border-radius: 50%;">
+    <img src="./public/static/svg/webplayer.svg" height="128" style="background-color: black;border-radius: 50%;">
     <h1 align="center">Web Music Player</h1>
     <p align="center">Site for listening music</p>
 </p>

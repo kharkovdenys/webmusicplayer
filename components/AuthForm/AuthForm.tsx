@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { CircularProgress } from "../CircularProgress/CircularProgress";
 import { Button, Input } from "../index";
-import AccountIcon from "./account.svg";
+import { AccountIcon } from "../../public/static/svg";
 import styles from "./AuthForm.module.css";
 import { AuthFormProps } from "./AuthForm.props";
 

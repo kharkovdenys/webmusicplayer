@@ -2,9 +2,7 @@
 import Link from "next/link";
 import { Button } from "../Button/Button";
 import styles from "./NavDrawer.module.css";
-import ProfileIcon from "./profile.svg";
-import UserIcon from "./user.svg";
-import PlaylistIcon from "./playlist.svg";
+import { PlaylistIcon, ProfileIcon, UserIcon } from "../../public/static/svg";
 import { usePathname } from "next/navigation";
 
 export const NavDrawer = (): JSX.Element => {

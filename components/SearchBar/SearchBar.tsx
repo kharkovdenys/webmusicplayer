@@ -2,8 +2,7 @@
 import { DetailedHTMLProps, HTMLAttributes } from 'react';
 import { Button } from "../Button/Button";
 import { Search } from "../Search/Search";
-import WebLogo from "./webplayer.svg";
-import PersonIcon from "./person.svg";
+import { PersonIcon, WebLogo } from "../../public/static/svg";
 import styles from "./SearchBar.module.css";
 import cn from "classnames";
 import Link from 'next/link';

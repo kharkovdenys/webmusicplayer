@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 import styles from "./Back.module.css";
-import BackIcon from "./back.svg";
+import { BackIcon } from "../../public/static/svg";
 
 export const Back = (): JSX.Element => {
     const router = useRouter();

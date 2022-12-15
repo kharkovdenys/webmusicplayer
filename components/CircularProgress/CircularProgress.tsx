@@ -1,5 +1,5 @@
 import styles from "./CircularProgress.module.css";
-import CircularProgressSVG from "./circularprogress.svg";
+import { CircularProgress as CircularProgressSVG } from "../../public/static/svg";
 import { CircularProgressProps } from "./CircularProgress.props";
 import cn from "classnames";
 

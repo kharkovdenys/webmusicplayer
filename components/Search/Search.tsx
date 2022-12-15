@@ -4,7 +4,7 @@ import { Button } from "../Button/Button";
 import { Input } from "../Input/Input";
 import styles from "./Search.module.css";
 import cn from "classnames";
-import SearchIcon from "./search.svg";
+import { SearchIcon } from "../../public/static/svg";
 import { useRef } from "react";
 import { useRouter } from "next/navigation";
 
