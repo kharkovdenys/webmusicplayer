@@ -1,12 +1,5 @@
 module.exports = {
-  async rewrites() {
-    return [
-      {
-        source: '/:any*',
-        destination: '/',
-      },
-    ];
-  },
+  reactStrictMode: true,
   images: {
     domains: ['lh3.googleusercontent.com', "i.ytimg.com", "yt3.ggpht.com"]
   },
