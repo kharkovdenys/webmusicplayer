@@ -1,6 +1,6 @@
 import { PlaylistListProps } from "./PlaylistList.props";
 import styles from "./PlaylistList.module.css";
-import cn from "classnames";
+import clsx from 'clsx';
 import Image from "next/image";
 import { useRouter } from 'next/navigation';
 import axios from "axios";
@@ -17,7 +17,7 @@ export const PlaylistList = ({ playlists, className, canDelete, update, ...props
     };
     const { setPlaylist } = useContext(AppContext);
     return (
-        <ul className={cn(className, styles.list)} {...props}>
+        <ul className={clsx(className, styles.list)} {...props}>
             {playlists.map((playlist) => (
                 <li
                     className={styles.li}

@@ -8,7 +8,7 @@ import { Duration } from "../Duration/Duration";
 import { Button } from "../Button/Button";
 import { SkipIcon, PauseIcon, PlayIcon, VolumeUpIcon, VolumeDownIcon } from "../../public/static/svg";
 import { AppContext } from "../../context/app.context";
-import cn from "classnames";
+import clsx from 'clsx';
 import axios from "axios";
 import { Music } from "../../interfaces/music.interface";
 
@@ -101,7 +101,7 @@ export const Player = (): JSX.Element => {
     };
     return <>
         {playlist.length !== 0 && <div className={styles["div-empty"]} />}
-        <div className={cn({ [styles["none"]]: playlist.length === 0 }, styles.player)}>
+        <div className={clsx({ [styles["none"]]: playlist.length === 0 }, styles.player)}>
             <YouTube
                 className={styles.none}
                 key={playlist[current] === undefined ? "" : playlist[current].videoId}

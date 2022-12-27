@@ -4,14 +4,14 @@ import { Button } from "../Button/Button";
 import { Search } from "../Search/Search";
 import { PersonIcon, WebLogo } from "../../public/static/svg";
 import styles from "./SearchBar.module.css";
-import cn from "classnames";
+import clsx from 'clsx';
 import Link from 'next/link';
 import { getCookie } from "cookies-next";
 import { useRouter } from 'next/navigation';
 
 export const SearchBar = ({ className, ...props }: DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>): JSX.Element => {
     const router = useRouter();
-    return <div className={cn(className, styles.searchbar)} {...props} >
+    return <div className={clsx(className, styles.searchbar)} {...props} >
         <Link href="/" className={styles.link}>
             <WebLogo className={styles.logo} ></WebLogo>
         </Link>

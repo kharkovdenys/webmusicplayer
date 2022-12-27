@@ -1,7 +1,7 @@
 "use client";
 import { MusicListProps } from "./MusicList.props";
 import styles from "./MusicList.module.css";
-import cn from "classnames";
+import clsx from 'clsx';
 import Image from "next/image";
 import { AppContext } from "../../context/app.context";
 import { useContext, useState } from "react";
@@ -21,7 +21,7 @@ export const MusicList = ({ musics, className, afterDelete, playlistId, ...props
     const [current, setCurrentSong] = useState("");
     return (
         <>
-            <ul className={cn(className, styles.list)} {...props}>
+            <ul className={clsx(className, styles.list)} {...props}>
                 {musics.map((music) => (
                     <li
                         className={styles.li}
