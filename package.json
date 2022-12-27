@@ -23,7 +23,7 @@
     "react-youtube": "^10.1.0"
   },
   "devDependencies": {
-    "@netlify/plugin-nextjs": "appdir",
+    "@netlify/plugin-nextjs": "^4.29.4",
     "@svgr/webpack": "^6.5.1",
     "@types/node": "^18.11.18",
     "@types/react": "^18.0.26",
