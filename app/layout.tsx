@@ -5,7 +5,7 @@ import "../styles/globals.css";
 
 export default function RootLayout({ children }: { children: React.ReactNode }): JSX.Element {
 	return (
-		<html>
+		<html lang="en">
 			<head>
 				<title>Web Music Player</title>
 				<meta name="description" content="Site for listening music" />
