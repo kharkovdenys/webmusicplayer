@@ -11,13 +11,13 @@
     "stylelint": "stylelint \"**/*.css\" --fix"
   },
   "dependencies": {
-    "axios": "^1.2.1",
+    "axios": "^1.2.2",
     "clsx": "^1.2.1",
     "cookies-next": "^2.1.1",
     "next": "13.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-hook-form": "^7.41.1",
+    "react-hook-form": "^7.41.5",
     "react-range": "^1.8.14",
     "react-toastify": "^9.1.1",
     "react-youtube": "^10.1.0"
@@ -28,15 +28,15 @@
     "@types/node": "^18.11.18",
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.10",
-    "@typescript-eslint/eslint-plugin": "^5.47.1",
+    "@typescript-eslint/eslint-plugin": "^5.48.0",
     "cross-env": "^7.0.3",
-    "eslint": "8.30.0",
+    "eslint": "8.31.0",
     "eslint-config-next": "13.1.1",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "stylelint": "^14.16.0",
+    "stylelint": "^14.16.1",
     "stylelint-config-idiomatic-order": "^9.0.0",
     "stylelint-config-standard": "^29.0.0",
-    "stylelint-order": "^5.0.0",
+    "stylelint-order": "^6.0.1",
     "typescript": "^4.9.4"
   }
 }
