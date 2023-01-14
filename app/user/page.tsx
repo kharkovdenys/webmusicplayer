@@ -1,39 +1,22 @@
 "use client";
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { Avatar, Back, Banner, CircularProgress } from '../../components';
 import { PlaylistList } from '../../components/PlaylistList/PlaylistList';
-import { Playlist } from '../../interfaces/playlist.interface';
 
 export default function OtherUserPage(): JSX.Element {
-    const [playlists, setPlaylists] = useState<Playlist[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
     const searchParams = useSearchParams();
     const name = searchParams.get("user");
-    useEffect(() => {
-        const controller = new AbortController();
 
-        async function startFetching(): Promise<void> {
-            setLoading(true);
-            setError(false);
-            axios.post("https://ytmusicsearch.azurewebsites.net/getotheruserplaylist", { name: name }, { signal: controller.signal }).then((response) => { setPlaylists(response.data); setLoading(false); }).catch((e) => {
-                if (!axios.isCancel(e))
-                    setError(true);
-                setLoading(false);
-            });
-        }
-
-        startFetching();
-
-        return () => { controller.abort(); };
-    }, [name]);
+    const { isLoading, isError, data: playlists } = useQuery(["userPlaylists"], () =>
+        axios.post("https://ytmusicsearch.azurewebsites.net/getotheruserplaylist", { name }).then((res) => res.data)
+    );
 
     return <div style={{ width: "100%" }}>
         <Back />
-        {loading ? <CircularProgress variant='for-list' /> :
-            error ? <Banner>😑 Oops.. Something went wrong</Banner> : <>
+        {isLoading ? <CircularProgress variant='for-list' /> :
+            isError ? <Banner>😑 Oops.. Something went wrong</Banner> : <>
                 <Avatar style={{ marginLeft: "auto", marginRight: "auto", marginTop: "30px" }}>
                     {name !== null ? name[0] : ""}
                 </Avatar>

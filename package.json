@@ -11,6 +11,7 @@
     "stylelint": "stylelint \"**/*.css\" --fix"
   },
   "dependencies": {
+    "@tanstack/react-query": "^4.22.0",
     "axios": "^1.2.2",
     "clsx": "^1.2.1",
     "cookies-next": "^2.1.1",

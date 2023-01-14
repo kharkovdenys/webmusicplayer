@@ -1,87 +1,46 @@
 "use client";
 import axios from 'axios';
-import { useEffect, useState } from 'react';
 import { Avatar, Back, Banner, CircularProgress, MusicList } from '../../components';
 import Image from "next/image";
-import { Music } from '../../interfaces/music.interface';
 import { getCookie } from 'cookies-next';
 import { useSearchParams } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
 
 export default function ItemsPlaylist(): JSX.Element {
-    const [musics, setMusics] = useState<Music[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [image, setImage] = useState("");
-    const [name, setName] = useState("");
-    const [error, setError] = useState(false);
-    const [update, setUpdate] = useState(false);
-    const [myPlaylist, setMyPlaylist] = useState(false);
     const searchParams = useSearchParams();
 
-    useEffect(() => {
-        const controller = new AbortController();
+    const { isLoading, isFetching, isError, data, refetch } = useQuery(["getMusicFromPlaylist", searchParams.get('id')], () =>
+        axios.post('https://ytmusicsearch.azurewebsites.net/getmusicfromplaylist', { id: searchParams.get("id") }).then(res => res.data)
+    );
 
-        function startFetching(): void {
-            setLoading(true);
-            setError(false);
-            axios.post('https://ytmusicsearch.azurewebsites.net/getmusicfromplaylist', { id: searchParams.get("id") }, { signal: controller.signal }).then(response => {
-                setMusics(response.data.tracks);
-                setImage(response.data.thumbnails[0].url);
-                const find = response.data.title.search(":");
-                setName(response.data.title.substr(find + 1, parseInt(response.data.title.substr(0, find))));
-                setLoading(false);
-            }).catch((e) => {
-                if (!axios.isCancel(e)) {
-                    setError(true);
-                    setLoading(false);
-                }
-            });
-        }
-
-        startFetching();
-
-        return () => { controller.abort(); };
-    }, [searchParams, update]);
-
-    useEffect(() => {
-        const controller = new AbortController();
-
-        const check = (): void => {
-            axios.post('https://ytmusicsearch.azurewebsites.net/playlist/check', { id: searchParams.get("id") }, { headers: { Authorization: getCookie("token") ?? "" } }).then(response => { setMyPlaylist(response.data); }).catch((e) => {
-                if (!axios.isCancel(e)) {
-                    setMyPlaylist(false);
-                }
-            });
-        };
-
-        check();
-
-        return () => { controller.abort(); };
-    }, [searchParams]);
+    const { data: myPlaylist } = useQuery(["check", searchParams.get('id')], () =>
+        axios.post('https://ytmusicsearch.azurewebsites.net/playlist/check', { id: searchParams.get("id") }, { headers: { Authorization: getCookie("token") ?? "" } }).then(res => res.data)
+    );
 
     return <div style={{ width: "100%" }}>
         <Back />
-        {loading ? <CircularProgress variant='for-list' /> :
-            error ? <Banner>😑 Oops.. Something went wrong</Banner> :
-                musics.length === 0 ? <Banner>😑 Oops.. This playlist is empty</Banner> :
+        {isLoading && isFetching ? <CircularProgress variant='for-list' /> :
+            isError ? <Banner>😑 Oops.. Something went wrong</Banner> :
+                data.tracks?.length === 0 ? <Banner>😑 Oops.. This playlist is empty</Banner> :
                     <>
                         <div style={{ display: "flex", flexDirection: "column" }}>
                             <Avatar
                                 style={{ marginLeft: "auto", marginRight: "auto", marginTop: 30, width: 90, height: 90, borderRadius: 0 }}                >
                                 <Image
                                     alt="Album"
-                                    src={image}
+                                    src={data.thumbnail?.[0].url ?? data.thumbnails?.[0].url}
                                     width={90}
                                     height={90}
                                 />
                             </Avatar>
                             <p style={{ marginLeft: "auto", marginRight: "auto", fontSize: "large" }}>
-                                {name}
+                                {data.title.substr(data.title.search(":") + 1, parseInt(data.title.substr(0, data.title.search(":"))))}
                             </p>
                         </div>
                         <p style={{ textAlign: "center", marginTop: 4, fontSize: "24px" }}>
                             Musics
                         </p>
-                        <MusicList musics={musics} afterDelete={myPlaylist ? (): void => setUpdate(!update) : undefined} playlistId={new URLSearchParams(location.search).get("id") ?? ""} />
+                        <MusicList musics={data.tracks ?? []} afterDelete={myPlaylist ? (): Promise<unknown> => refetch() : undefined} playlistId={new URLSearchParams(location.search).get("id") ?? ""} />
                     </>
         }
     </div>;

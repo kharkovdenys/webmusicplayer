@@ -1,37 +1,24 @@
 "use client";
 import axios from "axios";
 import { deleteCookie, getCookie } from "cookies-next";
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Avatar, Banner, Button, CircularProgress } from "../../components";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 
 export default function MyProfilePage(): JSX.Element {
-    const [name, setName] = useState("");
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
     const router = useRouter();
-    useEffect(() => {
-        const controller = new AbortController();
 
-        setError(false);
-        axios.get("https://databaseandapi.azurewebsites.net/info", { signal: controller.signal, headers: { Authorization: getCookie("token") ?? "" } }).then((name) => {
-            setName(name.data); setLoading(false);
-        }).catch((e) => {
-            if (!axios.isCancel(e)) {
-                setError(true);
-                setLoading(false);
-            }
-        });
+    const { isLoading, isError, data: name } = useQuery(["info"], () =>
+        axios.get("https://databaseandapi.azurewebsites.net/info", { headers: { Authorization: getCookie("token") ?? "" } }).then((res) => res.data)
+    );
 
-        return () => { controller.abort(); };
-    }, []);
     return (
         <div style={{ marginLeft: "auto", marginRight: "auto", alignItems: "center", justifyItems: "center", display: "flex", flexDirection: "column" }}>
-            {!loading ? getCookie("token") === undefined ? <Banner>😑 Oops.. You are not logged in</Banner> :
-                error ? <Banner>😑 Oops.. Something went wrong</Banner> :
+            {!isLoading ? getCookie("token") === undefined ? <Banner>😑 Oops.. You are not logged in</Banner> :
+                isError ? <Banner>😑 Oops.. Something went wrong</Banner> :
                     <><Avatar style={{ marginTop: "20px" }}>
-                        {name[0]}
+                        {name?.[0]}
                     </Avatar>
                         <p
                             style={{
