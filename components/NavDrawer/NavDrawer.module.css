@@ -46,7 +46,7 @@
   margin: 0;
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (width <= 480px) {
   .button p {
     font-size: 0.7rem;
   }
@@ -56,7 +56,7 @@
   }
 }
 
-@media screen and (max-width: 420px) {
+@media screen and (width <= 420px) {
   .button p {
     font-size: 0.5rem;
   }
@@ -66,7 +66,7 @@
   }
 }
 
-@media screen and (max-width: 350px) {
+@media screen and (width <= 350px) {
   .button p {
     font-size: 0.4rem;
   }
