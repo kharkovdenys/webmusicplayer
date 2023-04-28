@@ -2,19 +2,29 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { getCookie } from 'cookies-next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Banner, Button, CircularProgress, NewPlaylist, PlaylistList } from '../../../components';
 
 export default function MyPlaylistPage(): JSX.Element {
     const [showDialog, setShowDialog] = useState(false);
+    const [token, setToken] = useState<string>();
 
-    const { isLoading, isError, data: playlists, refetch } = useQuery(["getMyPlaylist"], () =>
-        axios.get("https://ytmusicsearch.azurewebsites.net/getmyplaylist", { headers: { Authorization: getCookie("token")?.toString() } }).then(res => res.data),
-        { enabled: !!getCookie("token") });
+    useEffect(() => {
+        const cookieToken = getCookie("token");
+        if (typeof cookieToken === "string") {
+            setToken(cookieToken);
+        } else {
+            setToken("");
+        }
+    }, []);
 
-    if (isLoading)
+    const { isInitialLoading, isError, data: playlists, refetch } = useQuery(["getMyPlaylist"], () =>
+        axios.get("https://ytmusicsearch.azurewebsites.net/getmyplaylist", { headers: { Authorization: token } }).then(res => res.data),
+        { enabled: !!token });
+
+    if (token === undefined || isInitialLoading)
         return <CircularProgress style={{ marginLeft: "auto", marginRight: "auto", display: "block", marginTop: "40px" }} />;
-    if (!getCookie("token"))
+    if (token === "")
         return <Banner>😑 Oops.. You are not logged in</Banner>;
     if (isError)
         return <Banner>😑 Oops.. Something went wrong</Banner>;

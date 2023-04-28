@@ -21,7 +21,10 @@ export default function LoginPage(): JSX.Element {
     const Submit = async (formData: FieldValues): Promise<void> => {
         setLoading(true);
         try {
-            const { data } = await axios.post("https://databaseandapi.azurewebsites.net/login", { UserName: formData.name, Password: formData["current-password"] });
+            const { data } = await axios.post("https://databaseandapi.azurewebsites.net/login", {
+                UserName: formData.name,
+                Password: formData["current-password"]
+            });
             setCookie("token", data.token, { expires: getExpires() });
             router.push("/");
             reset();
@@ -34,19 +37,8 @@ export default function LoginPage(): JSX.Element {
     };
     return (
         <>
-            <AuthForm variant={"login"} register={register} handleSubmit={handleSubmit}
-                Submit={Submit} loading={loading} />
-            <ToastContainer
-                position="bottom-left"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable={false}
-                pauseOnHover
-            />
+            <AuthForm variant="login" register={register} handleSubmit={handleSubmit} Submit={Submit} loading={loading} />
+            <ToastContainer position="bottom-left" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover />
         </>
     );
 }

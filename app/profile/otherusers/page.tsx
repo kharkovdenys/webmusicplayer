@@ -8,7 +8,7 @@ export default function FindUsersPage(): JSX.Element {
     const searchParams = useSearchParams();
     const router = useRouter();
 
-    const { isLoading, isError, data: users } = useQuery(["users", searchParams.get('')], () =>
+    const { isInitialLoading, isError, data: users } = useQuery(["users", searchParams.get('')], () =>
         axios.post("https://databaseandapi.azurewebsites.net/user", { UserName: searchParams.get('') }).then((res) => res.data),
         { enabled: !!searchParams.get('') }
     );
@@ -16,7 +16,7 @@ export default function FindUsersPage(): JSX.Element {
     return <div style={{ width: "100%" }}>
         <Search style={{ maxWidth: "400px", marginTop: "20px", marginLeft: "auto", marginRight: "auto", backgroundColor: "#909be9" }} placeholder={'Search Users'} pathname="/profile/otherusers" />
         {!searchParams.get('') ? null :
-            isLoading ? <CircularProgress style={{ marginLeft: "auto", marginRight: "auto", display: "block", marginTop: "40px" }} /> :
+            isInitialLoading ? <CircularProgress style={{ marginLeft: "auto", marginRight: "auto", display: "block", marginTop: "40px" }} /> :
                 isError ? <Banner>😑 Oops.. Something went wrong</Banner> :
                     users.length === 0 ? <Banner>😑 Oops.. Nothing found</Banner> :
                         <ul

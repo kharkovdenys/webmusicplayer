@@ -14,7 +14,10 @@ export default function RegisterPage(): JSX.Element {
     const Submit = async (formData: FieldValues): Promise<void> => {
         setLoading(true);
         try {
-            await axios.post("https://databaseandapi.azurewebsites.net/register", { UserName: formData.name, Password: formData["new-password"] });
+            await axios.post("https://databaseandapi.azurewebsites.net/register", {
+                UserName: formData.name,
+                Password: formData["new-password"]
+            });
             router.push("/login");
             reset();
         } catch (error) {
