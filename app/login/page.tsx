@@ -21,7 +21,7 @@ export default function LoginPage(): JSX.Element {
     const Submit = async (formData: FieldValues): Promise<void> => {
         setLoading(true);
         try {
-            const { data } = await axios.post("https://databaseandapi.azurewebsites.net/login", {
+            const { data } = await axios.post(`${process.env.NEXT_PUBLIC_DATABASE_API}/login`, {
                 UserName: formData.name,
                 Password: formData["current-password"]
             });

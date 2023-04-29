@@ -17,7 +17,7 @@ export const NewPlaylist = ({ show, onClose }: NewPlaylistProps): JSX.Element =>
     }, []);
 
     const createPlaylist = async (): Promise<void> => {
-        await axios.post("https://ytmusicsearch.azurewebsites.net/createplaylist", { name }, { headers: { Authorization: getCookie("token") ?? "" } });
+        await axios.post(`${process.env.NEXT_PUBLIC_SEARCH_API}/create_playlist`, { name }, { headers: { Authorization: getCookie("token") ?? "" } });
         onClose();
     };
 

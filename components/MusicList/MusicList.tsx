@@ -5,15 +5,11 @@ import clsx from 'clsx';
 import Image from "next/image";
 import { AppContext } from "../../context/app.context";
 import { useContext, useState } from "react";
-import { Music } from "../../interfaces/music.interface";
 import { getCookie } from "cookies-next";
 import axios from "axios";
 import { PlaylistDialog } from "../PlaylistDialog/PlaylistDialog";
 import { AddToPlaylistIcon, RemoveFromPlaylistIcon, PlayIcon } from "../../public/static/svg";
 
-export function isMusic(object: unknown): object is Music {
-    return Object.prototype.hasOwnProperty.call(object, "videoId");
-}
 
 export const MusicList = ({ musics, className, afterDelete, playlistId, ...props }: MusicListProps): JSX.Element => {
     const { setPlaylist, setCurrent } = useContext(AppContext);
@@ -25,13 +21,13 @@ export const MusicList = ({ musics, className, afterDelete, playlistId, ...props
                 {musics.map((music) => (
                     <li
                         className={styles.li}
-                        key={isMusic(music) ? music.videoId : music.tracks[0].videoId}
-                        onClick={(): void => { setCurrent?.(0); setPlaylist?.(isMusic(music) ? [music] : music.tracks); getCookie("token") && axios.post("https://databaseandapi.azurewebsites.net/musics", { IdVideo: isMusic(music) ? music.videoId : music.tracks[0].videoId }, { headers: { Authorization: getCookie("token") ?? "" } }); }}>
+                        key={music[0].videoId}
+                        onClick={(): void => { setCurrent?.(0); setPlaylist?.(music); getCookie("token") && axios.post(`${process.env.NEXT_PUBLIC_DATABASE_API}/musics`, { IdVideo: music[0].videoId }, { headers: { Authorization: getCookie("token") ?? "" } }); }}>
                         <div className={styles["div-image"]}>
                             <Image
                                 className={styles.image}
                                 alt="Album"
-                                src={(isMusic(music) ? music.thumbnail?.[0].url : music.tracks[0].thumbnail?.[0].url) ?? ""}
+                                src={music[0].thumbnail}
                                 width={40}
                                 height={40}
                             />
@@ -40,19 +36,19 @@ export const MusicList = ({ musics, className, afterDelete, playlistId, ...props
                             />
                         </div>
                         <div className={styles.texts}>
-                            <span className={styles.title}>{isMusic(music) ? music.title : music.tracks[0].title}</span>
-                            <p className={styles.secondary}>{isMusic(music) ? music.artists?.[0].name + " - " + music.album.name : music.tracks[0].artists?.[0].name + " - " + music.tracks[0].album.name}</p>
+                            <span className={styles.title}>{music[0].title}</span>
+                            <p className={styles.secondary}>{music[0].artists + " - " + music[0].album}</p>
                         </div>
                         <div>
                             <div style={{ display: afterDelete !== undefined ? "block" : "none" }} onClick={(e): void => {
-                                e.stopPropagation(); axios.post("https://ytmusicsearch.azurewebsites.net/playlist/remove", {
+                                e.stopPropagation(); axios.post(`${process.env.NEXT_PUBLIC_SEARCH_API}/playlist/remove`, {
                                     id: playlistId,
-                                    videoid: isMusic(music) ? music.videoId : music.tracks[0].videoId,
-                                    setVideoId: isMusic(music) ? music.setVideoId : music.tracks[0].setVideoId
+                                    videoId: music[0].videoId,
+                                    setVideoId: music[0].setVideoId
                                 }, { headers: { Authorization: getCookie("token") ?? "" } }).then((): void => afterDelete?.());
                             }}><RemoveFromPlaylistIcon ></RemoveFromPlaylistIcon></div>
-                            <div style={{ display: getCookie("token") !== undefined && afterDelete === undefined ? "block" : "none" }} onClick={(e): void => { e.stopPropagation(); setCurrentSong(isMusic(music) ? music.videoId : music.tracks[0].videoId); setShowDialog(true); }}><AddToPlaylistIcon ></AddToPlaylistIcon></div>
-                            <p className={styles.secondary}>{isMusic(music) ? music.length : music.tracks[0].length}</p>
+                            <div style={{ display: getCookie("token") !== undefined && afterDelete === undefined ? "block" : "none" }} onClick={(e): void => { e.stopPropagation(); setCurrentSong(music[0].videoId); setShowDialog(true); }}><AddToPlaylistIcon ></AddToPlaylistIcon></div>
+                            <p className={styles.secondary}>{music[0].duration}</p>
                         </div>
                     </li>
                 ))

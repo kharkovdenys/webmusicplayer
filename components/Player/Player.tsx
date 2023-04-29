@@ -10,7 +10,6 @@ import { SkipIcon, PauseIcon, PlayIcon, VolumeUpIcon, VolumeDownIcon } from "../
 import { AppContext } from "../../context/app.context";
 import clsx from 'clsx';
 import axios from "axios";
-import { Music } from "../../interfaces/music.interface";
 
 export const Player = (): JSX.Element => {
     const { playlist, current, setCurrent, setPlaylist } = useContext(AppContext);
@@ -80,8 +79,8 @@ export const Player = (): JSX.Element => {
         event.target.setVolume(volume);
         paused ? event.target.pauseVideo() : event.target.playVideo();
         if (current === playlist.length - 1) {
-            axios.post("https://ytmusicsearch.azurewebsites.net/getmusicmix", [{ "idVideo": playlist[current].videoId }]).then(response => {
-                setPlaylist?.(playlist.concat(response.data[0].tracks.splice(1)));
+            axios.post(`${process.env.NEXT_PUBLIC_SEARCH_API}/get-similar-music-playlist`, [{ "idVideo": playlist[current].videoId }]).then(response => {
+                setPlaylist?.(playlist.concat(response.data[0].splice(1)));
             });
         }
     };
@@ -95,17 +94,14 @@ export const Player = (): JSX.Element => {
             setCurrent?.(current - 1);
         }
     };
-    const isNotAlbum = (a: Music): string => {
-        if (Object.prototype.hasOwnProperty.call(a, "album")) return a.album.name;
-        return a.title;
-    };
+
     return <>
         {playlist.length !== 0 && <div className={styles["div-empty"]} />}
-        <div className={clsx({ [styles["none"]]: playlist.length === 0 }, styles.player)}>
+        {playlist[current] && <div className={clsx({ [styles["none"]]: playlist.length === 0 }, styles.player)}>
             <YouTube
                 className={styles.none}
-                key={playlist[current] === undefined ? "" : playlist[current].videoId}
-                videoId={playlist[current] === undefined ? "" : playlist[current].videoId}
+                key={playlist[current].videoId}
+                videoId={playlist[current].videoId}
                 opts={{
                     height: '0',
                     width: '0'
@@ -117,11 +113,11 @@ export const Player = (): JSX.Element => {
                 onEnd={Next}
             />
             <div className={styles["div-top"]}>
-                <Image alt={playlist[current] === undefined ? "" : playlist[current].title} src={playlist[current] === undefined ? "https://lh3.googleusercontent.com" : playlist[current].thumbnail?.[0].url as string} width={100} height={100} className={styles["cover-image"]} />
+                <Image alt={playlist[current].title} src={playlist[current].thumbnail} width={100} height={100} className={styles["cover-image"]} />
                 <div className={styles["div-top-texts"]}>
-                    <p className={styles.album}>{playlist[current] === undefined ? "" : isNotAlbum(playlist[current])}</p>
-                    <b className={styles.name}>{playlist[current] === undefined ? "" : playlist[current].title}</b>
-                    <p className={styles.artists}>{playlist[current] === undefined ? "" : playlist[current].artists?.[0].name}</p>
+                    <p className={styles.album}>{playlist[current].album}</p>
+                    <b className={styles.name}>{playlist[current].title}</b>
+                    <p className={styles.artists}>{playlist[current].artists}</p>
                 </div>
             </div>
             <Range
@@ -246,6 +242,6 @@ export const Player = (): JSX.Element => {
                     marginLeft: "16px"
                 }} />
             </div>
-        </div >
+        </div >}
     </>;
 };

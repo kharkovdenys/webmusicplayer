@@ -10,7 +10,7 @@ export default function OtherUserPage(): JSX.Element {
     const name = searchParams.get("user");
 
     const { isInitialLoading, isError, data: playlists } = useQuery(["userPlaylists"], () =>
-        axios.post("https://ytmusicsearch.azurewebsites.net/getotheruserplaylist", { name }).then((res) => res.data)
+        axios.post(`${process.env.NEXT_PUBLIC_SEARCH_API}/user-playlists`, { name }).then((res) => res.data)
     );
 
     return <div style={{ width: "100%" }}>

@@ -19,7 +19,7 @@ export default function MyPlaylistPage(): JSX.Element {
     }, []);
 
     const { isInitialLoading, isError, data: playlists, refetch } = useQuery(["getMyPlaylist"], () =>
-        axios.get("https://ytmusicsearch.azurewebsites.net/getmyplaylist", { headers: { Authorization: token } }).then(res => res.data),
+        axios.post(`${process.env.NEXT_PUBLIC_SEARCH_API}/user-playlists`, {}, { headers: { Authorization: token } }).then(res => res.data),
         { enabled: !!token });
 
     if (token === undefined || isInitialLoading)

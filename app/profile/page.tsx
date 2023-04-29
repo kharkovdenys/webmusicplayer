@@ -21,8 +21,8 @@ export default function MyProfilePage(): JSX.Element {
     }, []);
 
     const { isInitialLoading, isError, data: name } = useQuery(["info"], () =>
-        axios.get("https://databaseandapi.azurewebsites.net/info", { headers: { Authorization: token } }).then((res) => res.data)
-    );
+        axios.get(`${process.env.NEXT_PUBLIC_DATABASE_API}/info`, { headers: { Authorization: token } }).then((res) => res.data),
+        { enabled: !!token });
 
     return (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyItems: "center", marginLeft: "auto", marginRight: "auto" }}>

@@ -14,7 +14,7 @@ export default function RegisterPage(): JSX.Element {
     const Submit = async (formData: FieldValues): Promise<void> => {
         setLoading(true);
         try {
-            await axios.post("https://databaseandapi.azurewebsites.net/register", {
+            await axios.post(`${process.env.NEXT_PUBLIC_DATABASE_API}/register`, {
                 UserName: formData.name,
                 Password: formData["new-password"]
             });

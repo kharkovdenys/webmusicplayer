@@ -1,7 +1,12 @@
 module.exports = {
   reactStrictMode: true,
   images: {
-    domains: ['lh3.googleusercontent.com', "i.ytimg.com", "yt3.ggpht.com", "yt3.googleusercontent.com"]
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
   },
   experimental: {
     appDir: true,

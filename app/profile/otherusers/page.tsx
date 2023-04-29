@@ -9,7 +9,7 @@ export default function FindUsersPage(): JSX.Element {
     const router = useRouter();
 
     const { isInitialLoading, isError, data: users } = useQuery(["users", searchParams.get('')], () =>
-        axios.post("https://databaseandapi.azurewebsites.net/user", { UserName: searchParams.get('') }).then((res) => res.data),
+        axios.post(`${process.env.NEXT_PUBLIC_DATABASE_API}/user`, { UserName: searchParams.get('') }).then((res) => res.data),
         { enabled: !!searchParams.get('') }
     );
 

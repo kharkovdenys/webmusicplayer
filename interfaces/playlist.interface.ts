@@ -1,19 +1,9 @@
-export interface Author {
-    id: string;
-    name: string;
-}
-
-export interface Thumbnail {
-    height: number;
-    url: string;
-    width: number;
-}
+import { Music } from "./music.interface";
 
 export interface Playlist {
-    author: Author[];
-    count: string;
-    description: string;
-    playlistId: string;
-    thumbnails: Thumbnail[];
     title: string;
+    count: string;
+    playlistId: string;
+    thumbnail: string;
+    tracks: Music[];
 }

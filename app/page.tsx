@@ -18,11 +18,11 @@ export default function HistoryPage(): JSX.Element {
     }, []);
 
     const { isInitialLoading: isLoadingHistory, isError: isErrorHistory, data: history } = useQuery(["history"], () =>
-        axios.get("https://databaseandapi.azurewebsites.net/musics", { headers: { Authorization: token } }).then(res => res.data),
+        axios.get(`${process.env.NEXT_PUBLIC_DATABASE_API}/musics`, { headers: { Authorization: token } }).then(res => res.data),
         { enabled: !!token });
 
     const { isInitialLoading: isLoadingMusics, isError: isErrorMusics, data: musics } = useQuery(['musics', history],
-        () => axios.post('https://ytmusicsearch.azurewebsites.net/getmusicmix', history).then((res) => res.data),
+        () => axios.post(`${process.env.NEXT_PUBLIC_SEARCH_API}/get-similar-music-playlist`, history).then((res) => res.data),
         { enabled: !!history });
 
     if (token === undefined || isLoadingHistory || isLoadingMusics)

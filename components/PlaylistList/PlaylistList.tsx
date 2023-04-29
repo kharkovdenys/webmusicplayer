@@ -15,7 +15,7 @@ export const PlaylistList = ({ playlists, className, canDelete, update, ...props
         if (count === "1" || count === "0") return count + " song";
         return count + " songs";
     };
-    const { setPlaylist } = useContext(AppContext);
+    const { setPlaylist, setCurrent } = useContext(AppContext);
     return (
         <ul className={clsx(className, styles.list)} {...props}>
             {playlists.map((playlist) => (
@@ -25,12 +25,12 @@ export const PlaylistList = ({ playlists, className, canDelete, update, ...props
                     onClick={(): void => { router.push("/playlist?id=" + playlist.playlistId); }}>
                     <div className={styles["div-image"]} onClick={(e): void => {
                         e.stopPropagation();
-                        axios.post("https://ytmusicsearch.azurewebsites.net/getmusicfromplaylist", { id: playlist.playlistId }).then((response) => { setPlaylist?.(response.data.tracks); });
+                        axios.post(`${process.env.NEXT_PUBLIC_SEARCH_API}/get-music-from-playlist`, { id: playlist.playlistId }).then((response) => { setPlaylist?.(response.data.tracks); setCurrent?.(0); });
                     }}>
                         <Image
                             className={styles.image}
                             alt="Album"
-                            src={playlist.thumbnails?.[0].url}
+                            src={playlist.thumbnail}
                             width={40}
                             height={40}
                         />
@@ -44,7 +44,7 @@ export const PlaylistList = ({ playlists, className, canDelete, update, ...props
                     </div>
                     <div onClick={(e): void => {
                         e.stopPropagation();
-                        axios.post("https://ytmusicsearch.azurewebsites.net/removeplaylist", { id: playlist.playlistId }, { headers: { Authorization: getCookie("token") ?? "" } }).then(() => update?.());
+                        axios.post(`${process.env.NEXT_PUBLIC_SEARCH_API}/remove_playlist`, { id: playlist.playlistId }, { headers: { Authorization: getCookie("token") ?? "" } }).then(() => update?.());
                     }}
                         className={canDelete ? styles.visible : styles.hidden}>
                         <DeletePlaylistIcon style={{ display: "block", width: "35px" }} />

@@ -30,7 +30,7 @@ export const PlaylistDialog = ({ show, setShow, current }: PlaylistDialogProps):
         if (show || update) {
             setLoading(true);
             setUpdate(false);
-            axios.get("https://ytmusicsearch.azurewebsites.net/getmyplaylist", { headers: { Authorization: getCookie("token") ?? "" } }).then((response) => { setPlaylists(response.data); setLoading(false); });
+            axios.post(`${process.env.NEXT_PUBLIC_SEARCH_API}/user-playlists`, {}, { headers: { Authorization: getCookie("token") ?? "" } }).then((response) => { setPlaylists(response.data); setLoading(false); });
         }
     }, [show, update]
     );
@@ -46,16 +46,16 @@ export const PlaylistDialog = ({ show, setShow, current }: PlaylistDialogProps):
                             className={styles.li}
                             key={playlist.playlistId}
                             onClick={(): void => {
-                                axios.post("https://ytmusicsearch.azurewebsites.net/playlist/add", {
+                                axios.post(`${process.env.NEXT_PUBLIC_SEARCH_API}/playlist/add`, {
                                     id: playlist.playlistId,
-                                    videoid: current
+                                    videoId: current
                                 }, { headers: { Authorization: getCookie("token") ?? "" } }); setShow(false);
                             }}
                         >
                             <Image
                                 className={styles.image}
                                 alt="Album"
-                                src={playlist.thumbnails?.[0].url}
+                                src={playlist.thumbnail}
                                 width={80}
                                 height={80}
                             />
