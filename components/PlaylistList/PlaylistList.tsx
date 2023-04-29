@@ -1,13 +1,14 @@
-import { PlaylistListProps } from "./PlaylistList.props";
-import styles from "./PlaylistList.module.css";
+import axios from 'axios';
 import clsx from 'clsx';
-import Image from "next/image";
+import { getCookie } from 'cookies-next';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import axios from "axios";
-import { useContext } from "react";
-import { AppContext } from "../../context/app.context";
-import { PlayIcon, DeletePlaylistIcon } from "../../public/static/svg";
-import { getCookie } from "cookies-next";
+import { useContext } from 'react';
+import { MdPlayArrow, MdPlaylistRemove } from 'react-icons/md';
+
+import { AppContext } from '../../context/app.context';
+import styles from './PlaylistList.module.css';
+import { PlaylistListProps } from './PlaylistList.props';
 
 export const PlaylistList = ({ playlists, className, canDelete, update, ...props }: PlaylistListProps): JSX.Element => {
     const router = useRouter();
@@ -34,9 +35,7 @@ export const PlaylistList = ({ playlists, className, canDelete, update, ...props
                             width={40}
                             height={40}
                         />
-                        <PlayIcon
-                            className={styles.play}
-                        />
+                        <MdPlayArrow className={styles.play} />
                     </div>
                     <div className={styles.texts} >
                         <span className={styles.title}>{playlist.title}</span>
@@ -47,7 +46,7 @@ export const PlaylistList = ({ playlists, className, canDelete, update, ...props
                         axios.post(`${process.env.NEXT_PUBLIC_SEARCH_API}/remove_playlist`, { id: playlist.playlistId }, { headers: { Authorization: getCookie("token") ?? "" } }).then(() => update?.());
                     }}
                         className={canDelete ? styles.visible : styles.hidden}>
-                        <DeletePlaylistIcon style={{ display: "block", width: "35px" }} />
+                        <MdPlaylistRemove size="26px" />
                     </div>
                 </li>
             ))

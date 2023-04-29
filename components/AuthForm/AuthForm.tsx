@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { CircularProgress } from "../CircularProgress/CircularProgress";
 import { Button, Input } from "../index";
-import { AccountIcon } from "../../public/static/svg";
+import { MdPersonOutline } from "react-icons/md";
 import styles from "./AuthForm.module.css";
 import { AuthFormProps } from "./AuthForm.props";
 
 export const AuthForm = ({ variant, register, handleSubmit, Submit, loading }: AuthFormProps): JSX.Element => {
     return (
         <div>
-            <AccountIcon className={styles.icon} />
+            <MdPersonOutline className={styles.icon} />
             <p className={styles.text}>
                 {variant === "register" ? "Sign Up" : "Sign In"}</p>
             <form

@@ -1,15 +1,15 @@
 "use client";
-import { useRef, useState, useEffect, useContext } from "react";
-import styles from "./Player.module.css";
-import YouTube, { YouTubeEvent } from "react-youtube";
-import { Range, getTrackBackground } from 'react-range';
-import Image from "next/image";
-import { Duration } from "../Duration/Duration";
-import { Button } from "../Button/Button";
-import { SkipIcon, PauseIcon, PlayIcon, VolumeUpIcon, VolumeDownIcon } from "../../public/static/svg";
-import { AppContext } from "../../context/app.context";
-import clsx from 'clsx';
 import axios from "axios";
+import clsx from 'clsx';
+import Image from "next/image";
+import { useContext, useEffect, useRef, useState } from "react";
+import { MdVolumeDown, MdVolumeUp, MdPlayArrow, MdPause, MdSkipNext, MdSkipPrevious } from "react-icons/md";
+import { Range, getTrackBackground } from 'react-range';
+import YouTube, { YouTubeEvent } from "react-youtube";
+import { AppContext } from "../../context/app.context";
+import { Button } from "../Button/Button";
+import { Duration } from "../Duration/Duration";
+import styles from "./Player.module.css";
 
 export const Player = (): JSX.Element => {
     const { playlist, current, setCurrent, setPlaylist } = useContext(AppContext);
@@ -40,6 +40,7 @@ export const Player = (): JSX.Element => {
         };
 
     }, [duration, seeking]);
+
     useEffect(() => {
         window.onmouseup = function (): void {
             if (seeking) {
@@ -48,13 +49,14 @@ export const Player = (): JSX.Element => {
             }
         };
     }, [duration, played, seeking, volume]);
+
     useEffect(() => {
         window.onkeydown = async function (e): Promise<void> {
             if (e.code === "Space" && e.target === document.body && playlist.length !== 0) {
                 e.preventDefault();
                 const state = await player.current?.getInternalPlayer().getPlayerState();
                 if (state === 1 || state === 2) {
-                    !paused ? player.current?.getInternalPlayer().pauseVideo() : player.current?.getInternalPlayer().playVideo();
+                    paused ? player.current?.getInternalPlayer().playVideo() : player.current?.getInternalPlayer().pauseVideo();
                 }
                 if (state === 5 && paused) {
                     player.current?.getInternalPlayer().playVideo();
@@ -62,15 +64,19 @@ export const Player = (): JSX.Element => {
             }
         };
     }, [duration, paused, played, playlist.length, seeking]);
+
     const handleSeekMouseDown = (): void => {
         setSeeking(true);
     };
+
     const handlePlay = (): void => {
         setPaused(false);
     };
+
     const handlePause = (): void => {
         setPaused(true);
     };
+
     const handleReady = (event: YouTubeEvent): void => {
         if (event.target.isMuted()) {
             event.target.unMute();
@@ -84,11 +90,13 @@ export const Player = (): JSX.Element => {
             });
         }
     };
+
     const Next = (): void => {
         if (playlist.length - 1 !== current) {
             setCurrent?.(current + 1);
         }
     };
+
     const Prev = (): void => {
         if (0 !== current) {
             setCurrent?.(current - 1);
@@ -162,10 +170,8 @@ export const Player = (): JSX.Element => {
                 <Duration seconds={duration * (1 - played)} />
             </div>
             <div className={styles["div-buttons"]}>
-                <Button
-                    onClick={Prev}
-                >
-                    <SkipIcon className={styles["icon-previous-next"]} />
+                <Button onClick={Prev}>
+                    <MdSkipPrevious className={styles["icon-previous-next"]} />
                 </Button>
                 <Button
                     onClick={async (): Promise<void> => {
@@ -178,26 +184,14 @@ export const Player = (): JSX.Element => {
                         }
                     }}
                 >
-                    {paused ? (
-                        <PlayIcon
-                            className={styles["icon-play-pause"]}
-                        />
-                    ) : (
-                        <PauseIcon
-                            className={styles["icon-play-pause"]}
-                        />
-                    )}
+                    {paused ? <MdPlayArrow className={styles["icon-play-pause"]} /> : <MdPause className={styles["icon-play-pause"]} />}
                 </Button>
-                <Button
-                    onClick={Next}
-                >
-                    <SkipIcon className={styles["icon-previous-next"]} style={{
-                        transform: "rotate(180deg)"
-                    }} />
+                <Button onClick={Next}>
+                    <MdSkipNext className={styles["icon-previous-next"]} />
                 </Button>
             </div>
             <div className={styles["div-volume"]}>
-                <VolumeDownIcon className={styles["icon-volume"]} style={{
+                <MdVolumeDown className={styles["icon-volume"]} style={{
                     marginRight: "16px"
                 }} />
                 <Range
@@ -238,7 +232,7 @@ export const Player = (): JSX.Element => {
                         />
                     )}
                 />
-                <VolumeUpIcon className={styles["icon-volume"]} style={{
+                <MdVolumeUp className={styles["icon-volume"]} style={{
                     marginLeft: "16px"
                 }} />
             </div>

@@ -4,7 +4,7 @@ import { Button } from "../Button/Button";
 import { Input } from "../Input/Input";
 import styles from "./Search.module.css";
 import clsx from 'clsx';
-import { SearchIcon } from "../../public/static/svg";
+import { MdSearch } from "react-icons/md";
 import { useRef } from "react";
 import { useRouter } from "next/navigation";
 
@@ -17,6 +17,6 @@ export const Search = ({ className, placeholder, pathname, ...props }: SearchPro
     };
     return <form className={clsx(className, styles.search)} autoComplete={"off"} role={"search"} onSubmit={(e): void => { e.preventDefault(); goToSearch(); }} {...props} >
         <Input placeholder={placeholder} type={"text"} ref={search} variant="search" />
-        <Button type="submit"><SearchIcon className={styles.icon} /></Button>
+        <Button type="submit"><MdSearch className={styles.icon} /></Button>
     </form>;
 };

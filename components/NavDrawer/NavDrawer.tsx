@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { Button } from "../Button/Button";
 import styles from "./NavDrawer.module.css";
-import { PlaylistIcon, ProfileIcon, UserIcon } from "../../public/static/svg";
+import { MdPerson, MdPlaylistPlay, MdPersonSearch } from "react-icons/md";
 import { usePathname } from "next/navigation";
 
 export const NavDrawer = (): JSX.Element => {
@@ -10,19 +10,19 @@ export const NavDrawer = (): JSX.Element => {
     return <div className={styles["nav-drawer"]}>
         <Link href="profile/" className={styles.link}>
             <Button className={pathname === "/profile" ? styles["button-active"] : styles.button}>
-                <ProfileIcon className={styles.icon}></ProfileIcon>
+                <MdPerson size="20px"></MdPerson>
                 <p>My Profile</p>
             </Button>
         </Link>
         <Link href="profile/myplaylists" className={styles.link}>
             <Button className={pathname === "/profile/myplaylists" ? styles["button-active"] : styles.button}>
-                <PlaylistIcon className={styles.icon}></PlaylistIcon>
+                <MdPlaylistPlay size="20px"></MdPlaylistPlay>
                 <p>My Playlists</p>
             </Button>
         </Link>
         <Link href="profile/otherusers" className={styles.link}>
             <Button className={pathname?.startsWith("/profile/otherusers") ? styles["button-active"] : styles.button}>
-                <UserIcon className={styles.icon}></UserIcon>
+                <MdPersonSearch size="20px"></MdPersonSearch>
                 <p>Other Users</p>
             </Button>
         </Link>

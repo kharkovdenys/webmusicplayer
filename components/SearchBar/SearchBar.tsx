@@ -2,7 +2,8 @@
 import { DetailedHTMLProps, HTMLAttributes } from 'react';
 import { Button } from "../Button/Button";
 import { Search } from "../Search/Search";
-import { PersonIcon, WebLogo } from "../../public/static/svg";
+import { MdPerson } from "react-icons/md";
+import WebLogo from "../../public/static/svg/webplayer.svg";
 import styles from "./SearchBar.module.css";
 import clsx from 'clsx';
 import Link from 'next/link';
@@ -16,6 +17,6 @@ export const SearchBar = ({ className, ...props }: DetailedHTMLProps<HTMLAttribu
             <WebLogo className={styles.logo} ></WebLogo>
         </Link>
         <Search placeholder="Search Music" className={styles.search} pathname='/search' />
-        <Button className={styles["icon-button"]} onClick={(): void => getCookie("token") === undefined ? router.push("/login") : router.push("/profile")}><PersonIcon className={styles.icon}></PersonIcon></Button>
+        <Button className={styles["icon-button"]} onClick={(): void => getCookie("token") === undefined ? router.push("/login") : router.push("/profile")}><MdPerson className={styles.icon}></MdPerson></Button>
     </div>;
 };

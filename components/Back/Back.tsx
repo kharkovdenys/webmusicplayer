@@ -1,11 +1,11 @@
 import { useRouter } from "next/navigation";
 import styles from "./Back.module.css";
-import { BackIcon } from "../../public/static/svg";
+import { MdArrowBack } from "react-icons/md";
 
 export const Back = (): JSX.Element => {
     const router = useRouter();
     return (
-        <BackIcon
+        <MdArrowBack
             onClick={(): void => router.back()}
             className={styles.back}
         />

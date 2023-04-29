@@ -8,7 +8,7 @@ import { useContext, useState } from "react";
 import { getCookie } from "cookies-next";
 import axios from "axios";
 import { PlaylistDialog } from "../PlaylistDialog/PlaylistDialog";
-import { AddToPlaylistIcon, RemoveFromPlaylistIcon, PlayIcon } from "../../public/static/svg";
+import { MdPlayArrow, MdPlaylistRemove, MdPlaylistAdd } from "react-icons/md";
 
 
 export const MusicList = ({ musics, className, afterDelete, playlistId, ...props }: MusicListProps): JSX.Element => {
@@ -31,9 +31,7 @@ export const MusicList = ({ musics, className, afterDelete, playlistId, ...props
                                 width={40}
                                 height={40}
                             />
-                            <PlayIcon
-                                className={styles.play}
-                            />
+                            <MdPlayArrow className={styles.play} />
                         </div>
                         <div className={styles.texts}>
                             <span className={styles.title}>{music[0].title}</span>
@@ -46,8 +44,8 @@ export const MusicList = ({ musics, className, afterDelete, playlistId, ...props
                                     videoId: music[0].videoId,
                                     setVideoId: music[0].setVideoId
                                 }, { headers: { Authorization: getCookie("token") ?? "" } }).then((): void => afterDelete?.());
-                            }}><RemoveFromPlaylistIcon ></RemoveFromPlaylistIcon></div>
-                            <div style={{ display: getCookie("token") !== undefined && afterDelete === undefined ? "block" : "none" }} onClick={(e): void => { e.stopPropagation(); setCurrentSong(music[0].videoId); setShowDialog(true); }}><AddToPlaylistIcon ></AddToPlaylistIcon></div>
+                            }}><MdPlaylistRemove size="26px" /></div>
+                            <div style={{ display: getCookie("token") !== undefined && afterDelete === undefined ? "block" : "none" }} onClick={(e): void => { e.stopPropagation(); setCurrentSong(music[0].videoId); setShowDialog(true); }}><MdPlaylistAdd size="26px" /></div>
                             <p className={styles.secondary}>{music[0].duration}</p>
                         </div>
                     </li>
