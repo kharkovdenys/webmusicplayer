@@ -1,6 +1,8 @@
 import { DurationProps } from "./Duration.props";
 
 const format = (seconds: number): string => {
+    if (isNaN(seconds))
+        return '0:00';
     const date = new Date(seconds * 1000);
     const hh = date.getUTCHours();
     const mm = date.getUTCMinutes();

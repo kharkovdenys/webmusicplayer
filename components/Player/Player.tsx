@@ -1,15 +1,15 @@
 "use client";
-import axios from "axios";
-import clsx from 'clsx';
-import Image from "next/image";
-import { useContext, useEffect, useRef, useState } from "react";
-import { MdVolumeDown, MdVolumeUp, MdPlayArrow, MdPause, MdSkipNext, MdSkipPrevious } from "react-icons/md";
-import { Range, getTrackBackground } from 'react-range';
-import YouTube, { YouTubeEvent } from "react-youtube";
-import { AppContext } from "../../context/app.context";
-import { Button } from "../Button/Button";
-import { Duration } from "../Duration/Duration";
-import styles from "./Player.module.css";
+import axios from 'axios';
+import Image from 'next/image';
+import { RefObject, useContext, useEffect, useRef, useState } from 'react';
+import { MdPause, MdPlayArrow, MdSkipNext, MdSkipPrevious, MdVolumeUp } from 'react-icons/md';
+import { getTrackBackground, Range } from 'react-range';
+import YouTube, { YouTubeEvent } from 'react-youtube';
+
+import { AppContext } from '../../context/app.context';
+import { Button } from '../Button/Button';
+import { Duration } from '../Duration/Duration';
+import styles from './Player.module.css';
 
 export const Player = (): JSX.Element => {
     const { playlist, current, setCurrent, setPlaylist } = useContext(AppContext);
@@ -29,16 +29,15 @@ export const Player = (): JSX.Element => {
     }, [volume]);
 
     useEffect(() => {
-        const interval = setInterval(async () => {
+        let timeoutId: NodeJS.Timeout;
+        const updatePlayed = async (): Promise<void> => {
             if (!seeking) {
                 setPlayed(await player.current?.getInternalPlayer().getCurrentTime() / duration);
+                timeoutId = setTimeout(updatePlayed, 100);
             }
-        }, 100);
-
-        return () => {
-            clearInterval(interval);
         };
-
+        timeoutId = setTimeout(updatePlayed, 100);
+        return () => clearTimeout(timeoutId);
     }, [duration, seeking]);
 
     useEffect(() => {
@@ -48,22 +47,26 @@ export const Player = (): JSX.Element => {
                 player.current?.getInternalPlayer().seekTo(played * duration);
             }
         };
-    }, [duration, played, seeking, volume]);
+    }, [duration, played, seeking]);
 
     useEffect(() => {
         window.onkeydown = async function (e): Promise<void> {
             if (e.code === "Space" && e.target === document.body && playlist.length !== 0) {
                 e.preventDefault();
-                const state = await player.current?.getInternalPlayer().getPlayerState();
-                if (state === 1 || state === 2) {
-                    paused ? player.current?.getInternalPlayer().playVideo() : player.current?.getInternalPlayer().pauseVideo();
-                }
-                if (state === 5 && paused) {
-                    player.current?.getInternalPlayer().playVideo();
-                }
+                togglePlayback(player, paused);
             }
         };
-    }, [duration, paused, played, playlist.length, seeking]);
+    }, [paused, played, playlist.length]);
+
+    const togglePlayback = async (player: RefObject<YouTube>, paused: boolean): Promise<void> => {
+        const state = await player.current?.getInternalPlayer().getPlayerState();
+        if (state === 1 || state === 2) {
+            paused ? player.current?.getInternalPlayer().playVideo() : player.current?.getInternalPlayer().pauseVideo();
+        }
+        if (state === 5 && paused) {
+            player.current?.getInternalPlayer().playVideo();
+        }
+    };
 
     const handleSeekMouseDown = (): void => {
         setSeeking(true);
@@ -104,10 +107,10 @@ export const Player = (): JSX.Element => {
     };
 
     return <>
-        {playlist.length !== 0 && <div className={styles["div-empty"]} />}
-        {playlist[current] && <div className={clsx({ [styles["none"]]: playlist.length === 0 }, styles.player)}>
+        <div className={styles["page-increase"]}></div>
+        {playlist.length !== 0 && <div className={styles.player}>
             <YouTube
-                className={styles.none}
+                style={{ "display": "none" }}
                 key={playlist[current].videoId}
                 videoId={playlist[current].videoId}
                 opts={{
@@ -120,80 +123,68 @@ export const Player = (): JSX.Element => {
                 onPause={handlePause}
                 onEnd={Next}
             />
-            <div className={styles["div-top"]}>
-                <Image alt={playlist[current].title} src={playlist[current].thumbnail} width={100} height={100} className={styles["cover-image"]} />
-                <div className={styles["div-top-texts"]}>
-                    <p className={styles.album}>{playlist[current].album}</p>
-                    <b className={styles.name}>{playlist[current].title}</b>
-                    <p className={styles.artists}>{playlist[current].artists}</p>
-                </div>
-            </div>
-            <Range
-                step={0.001}
-                min={0}
-                max={0.999999}
-                values={[played]}
-                onChange={(values): void => setPlayed(values[0])}
-                renderTrack={({ props, children }): JSX.Element => (
-                    <div
-                        key='Line1'
-                        onMouseDown={(e): void => { props.onMouseDown(e); handleSeekMouseDown(); }}
-                        onTouchStart={props.onTouchStart}
-                        className={styles["line"]}>
-                        <div
-                            ref={props.ref}
-                            key='Indicator1'
-                            className={styles["indicator"]}
-                            style={{
-                                background: getTrackBackground({
-                                    values: [played],
-                                    colors: ["black", "#00000047"],
-                                    min: 0,
-                                    max: 0.999999
-                                }),
-                            }}
-                        >
-                            {children}
-                        </div>
-                    </div>
-                )}
-                renderThumb={({ props }): JSX.Element => (
-                    <div
-                        {...props}
-                        key='Thumb1'
-                        className={styles["time-thumb"]}
-                    />
-                )}
-            />
-            <div className={styles["div-duration"]}>
-                <Duration seconds={duration * played} />
-                <Duration seconds={duration * (1 - played)} />
-            </div>
-            <div className={styles["div-buttons"]}>
+            <div className={styles["controls"]}>
                 <Button onClick={Prev}>
-                    <MdSkipPrevious className={styles["icon-previous-next"]} />
+                    <MdSkipPrevious size="35px" color="white" />
                 </Button>
-                <Button
-                    onClick={async (): Promise<void> => {
-                        const state = await player.current?.getInternalPlayer().getPlayerState();
-                        if (state === 1 || state === 2) {
-                            !paused ? player.current?.getInternalPlayer().pauseVideo() : player.current?.getInternalPlayer().playVideo();
-                        }
-                        if (state === 5 && paused) {
-                            player.current?.getInternalPlayer().playVideo();
-                        }
-                    }}
-                >
-                    {paused ? <MdPlayArrow className={styles["icon-play-pause"]} /> : <MdPause className={styles["icon-play-pause"]} />}
+                <Button onClick={(): Promise<void> => togglePlayback(player, paused)}>
+                    {paused ?
+                        <MdPlayArrow size="48px" color="white" />
+                        : <MdPause size="48px" color="white" />}
                 </Button>
                 <Button onClick={Next}>
-                    <MdSkipNext className={styles["icon-previous-next"]} />
+                    <MdSkipNext size="35px" color="white" />
                 </Button>
             </div>
-            <div className={styles["div-volume"]}>
-                <MdVolumeDown className={styles["icon-volume"]} style={{
-                    marginRight: "16px"
-                }} />
+            <Image alt={playlist[current].title} src={playlist[current].thumbnail} width={60} height={60} className={styles["cover-image"]} />
+            <div className={styles["track"]}>
+                <div className={styles["music-info"]}>
+                    <p className={styles.album}>{playlist[current].album}</p>
+                    <b className={styles.name}>{playlist[current].title + " · " + playlist[current].artists}</b>
+                </div>
+                <div className={styles["timebar"]}>
+                    <Duration seconds={duration * played} />
+                    <Range
+                        step={0.001}
+                        min={0}
+                        max={0.999999}
+                        values={[played]}
+                        onChange={(values): void => setPlayed(values[0])}
+                        renderTrack={({ props, children }): JSX.Element => (
+                            <div
+                                key='Line1'
+                                onMouseDown={(e): void => { props.onMouseDown(e); handleSeekMouseDown(); }}
+                                onTouchStart={props.onTouchStart}
+                                className={styles["line"]}>
+                                <div
+                                    ref={props.ref}
+                                    key='Indicator1'
+                                    className={styles["indicator"]}
+                                    style={{
+                                        background: getTrackBackground({
+                                            values: [played],
+                                            colors: ["blue", "white"],
+                                            min: 0,
+                                            max: 0.999999
+                                        }),
+                                    }}
+                                >
+                                    {children}
+                                </div>
+                            </div>
+                        )}
+                        renderThumb={({ props }): JSX.Element => (
+                            <div
+                                {...props}
+                                key='Thumb1'
+                                className={styles["time-thumb"]}
+                            />
+                        )}
+                    />
+                    <Duration seconds={duration} />
+                </div>
+            </div>
+            <div className={styles["volume"]}>
                 <Range
                     step={1}
                     min={0}
@@ -214,7 +205,7 @@ export const Player = (): JSX.Element => {
                                 style={{
                                     background: getTrackBackground({
                                         values: [volume],
-                                        colors: ["#000000DE", "#00000061"],
+                                        colors: ["white", "#C0C0C0"],
                                         min: 0,
                                         max: 100
                                     }),
@@ -232,10 +223,9 @@ export const Player = (): JSX.Element => {
                         />
                     )}
                 />
-                <MdVolumeUp className={styles["icon-volume"]} style={{
-                    marginLeft: "16px"
-                }} />
+                <MdVolumeUp color="white" size="24px" />
             </div>
-        </div >}
+        </div>
+        }
     </>;
 };
